@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samantha Jeanty — Exam 3 Animated Review (Full)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f141a; --panel:#151c25; --board:#1b242f; --ink:#eaf2f0;
+  --teal:#4fd1c5; --teal-deep:#0c6b5e; --amber:#f6c453; --coral:#ff7a6b;
+  --violet:#b07ad1; --line:#2a3543; --muted:#8aa0a8; --ok:#5fd38a; --bad:#ff6b5e;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:"Space Grotesk",sans-serif;-webkit-font-smoothing:antialiased;}
+.watermark{position:fixed;inset:0;z-index:9999;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='340' height='180'%3E%3Ctext x='8' y='120' transform='rotate(-26 170 90)' font-family='Georgia' font-size='18' font-weight='bold' fill='%234fd1c5'%3ESamantha Jeanty%3C/text%3E%3C/svg%3E");
+  background-repeat:repeat;opacity:.045;}
+.wrap{max-width:1040px;margin:0 auto;padding:20px 14px 90px;}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:14px;}
+h1{font-family:"Caveat",cursive;font-size:38px;font-weight:700;color:var(--teal);line-height:.9;}
+.tagline{font-family:"DM Mono",monospace;font-size:11.5px;color:var(--muted);letter-spacing:.03em;}
+
+/* overall progress */
+.allprog{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-family:"DM Mono",monospace;font-size:11.5px;color:var(--muted);}
+.allprog .track{flex:1;height:8px;background:var(--board);border-radius:20px;overflow:hidden;border:1px solid var(--line);}
+.allprog .track > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--amber));transition:width .4s;}
+
+/* menu */
+.menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px;margin-bottom:18px;}
+.menu button{position:relative;text-align:left;background:var(--panel);border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:11px 12px;cursor:pointer;transition:.16s;font-family:"Space Grotesk";}
+.menu button:hover{border-color:var(--teal);transform:translateY(-2px);}
+.menu button.active{background:var(--teal-deep);border-color:var(--teal);}
+.menu .cn{font-family:"DM Mono",monospace;font-size:11px;color:var(--amber);display:block;margin-bottom:3px;}
+.menu .ct{font-size:13.5px;font-weight:500;line-height:1.15;}
+.menu .chk{position:absolute;top:8px;right:9px;font-size:12px;color:var(--ok);opacity:0;transition:.2s;}
+.menu button.done .chk{opacity:1;}
+.menu button.active .cn{color:#bff3ec;}
+
+/* stage */
+.stage-wrap{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 30px 60px -30px #000;}
+.titlebar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 15px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,var(--teal-deep),transparent);flex-wrap:wrap;}
+.titlebar .now{font-weight:700;font-size:15px;}
+.titlebar .phase{font-family:"DM Mono",monospace;font-size:11px;color:var(--amber);background:rgba(246,196,83,.12);padding:3px 9px;border-radius:20px;}
+.titlebar .scenecount{font-family:"DM Mono",monospace;font-size:11.5px;color:var(--muted);}
+.stage{position:relative;width:100%;aspect-ratio:16/9;background:radial-gradient(circle at 28% 18%,#243140 0%,transparent 55%),var(--board);}
+.stage svg{position:absolute;inset:0;width:100%;height:100%;}
+.caption{position:absolute;left:0;right:0;bottom:0;padding:14px 20px 16px;background:linear-gradient(transparent,rgba(6,10,14,.94) 38%);font-size:clamp(14px,2.3vw,20px);line-height:1.42;font-weight:500;min-height:78px;}
+.caption .lead{color:var(--amber);font-family:"DM Mono",monospace;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:4px;}
+.hl{color:var(--teal);font-weight:700;}.ha{color:var(--amber);font-weight:700;}.hc{color:var(--coral);font-weight:700;}.hv{color:var(--violet);font-weight:700;}
+.flag{position:absolute;top:10px;right:12px;background:var(--coral);color:#3a0d07;font-family:"DM Mono",monospace;font-size:10px;font-weight:600;padding:4px 9px;border-radius:20px;letter-spacing:.05em;z-index:3;}
+.mustknow{position:absolute;top:10px;left:12px;background:var(--amber);color:#3a2a06;font-family:"DM Mono",monospace;font-size:10px;font-weight:700;padding:4px 9px;border-radius:20px;z-index:3;}
+
+/* mid-video checkpoint */
+.checkpoint{position:absolute;inset:0;background:rgba(10,15,20,.96);display:flex;flex-direction:column;justify-content:center;padding:24px;z-index:5;animation:fadein .3s;}
+.checkpoint .qlabel{font-family:"DM Mono",monospace;font-size:12px;color:var(--amber);letter-spacing:.1em;margin-bottom:8px;}
+.checkpoint .qtext{font-size:clamp(16px,2.6vw,22px);font-weight:600;margin-bottom:16px;line-height:1.35;}
+.checkpoint .copt{background:var(--board);border:1.5px solid var(--line);color:var(--ink);border-radius:10px;padding:11px 14px;margin-bottom:8px;cursor:pointer;text-align:left;font-family:"Space Grotesk";font-size:14.5px;transition:.14s;}
+.checkpoint .copt:hover{border-color:var(--teal);}
+.checkpoint .copt.right{background:rgba(95,211,138,.16);border-color:var(--ok);}
+.checkpoint .copt.wrong{background:rgba(255,107,94,.16);border-color:var(--bad);}
+.checkpoint .cfb{font-size:13.5px;color:var(--muted);margin-top:6px;min-height:20px;line-height:1.4;}
+.checkpoint .cont{align-self:flex-start;margin-top:12px;background:var(--teal);color:#06231f;border:none;border-radius:9px;padding:9px 18px;font-weight:700;cursor:pointer;font-family:"Space Grotesk";opacity:.4;pointer-events:none;transition:.2s;}
+.checkpoint .cont.on{opacity:1;pointer-events:auto;}
+
+/* progress + controls */
+.progress{height:5px;background:var(--board);}
+.progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--amber));}
+.controls{display:flex;align-items:center;gap:7px;padding:11px 13px;flex-wrap:wrap;}
+.controls button{background:var(--board);border:1px solid var(--line);color:var(--ink);border-radius:9px;padding:9px 13px;cursor:pointer;font-family:"Space Grotesk";font-weight:500;font-size:13.5px;transition:.15s;}
+.controls button:hover{border-color:var(--teal);}
+.controls .play{background:var(--teal);color:#06231f;border-color:var(--teal);font-weight:700;min-width:90px;}
+.controls .spacer{flex:1;}
+.controls .toggle,.controls .speed{font-family:"DM Mono",monospace;font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:5px;}
+.controls select{background:var(--board);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:5px 7px;font-family:"DM Mono",monospace;font-size:12px;}
+.dots{display:flex;gap:4px;align-items:center;flex-wrap:wrap;max-width:280px;}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--line);cursor:pointer;transition:.15s;}
+.dots i.on{background:var(--teal);transform:scale(1.35);}
+.dots i.qmark{background:var(--amber);border-radius:1px;}
+
+/* quiz section */
+.quizsec{margin-top:22px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;display:none;}
+.quizsec.show{display:block;}
+.quizsec h2{font-family:"Caveat",cursive;font-size:30px;color:var(--amber);margin-bottom:4px;}
+.quizsec .qsub{font-family:"DM Mono",monospace;font-size:12px;color:var(--muted);margin-bottom:16px;}
+.qcard{border:1px solid var(--line);border-radius:13px;padding:16px;margin-bottom:14px;background:var(--board);}
+.qcard .qh{font-family:"DM Mono",monospace;font-size:11px;color:var(--teal);margin-bottom:6px;}
+.qcard .qq{font-weight:600;font-size:15.5px;margin-bottom:11px;line-height:1.4;}
+.qcard .qo{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--line);border-radius:9px;padding:9px 12px;margin-bottom:7px;cursor:pointer;background:var(--panel);transition:.14s;font-size:14px;}
+.qcard .qo:hover{border-color:var(--teal);}
+.qcard .qo .ll{font-family:"DM Mono",monospace;color:var(--muted);font-weight:500;}
+.qcard .qo.right{background:rgba(95,211,138,.15);border-color:var(--ok);}
+.qcard .qo.wrong{background:rgba(255,107,94,.15);border-color:var(--bad);}
+.qcard .qo.locked{pointer-events:none;}
+.qcard .qrat{margin-top:9px;border-left:3px solid var(--teal);background:rgba(79,209,197,.08);padding:9px 12px;border-radius:0 9px 9px 0;font-size:13.5px;line-height:1.45;display:none;}
+.qcard .qrat.show{display:block;}
+.qscore{font-family:"DM Mono",monospace;font-size:14px;color:var(--amber);text-align:center;padding:10px;border:1px dashed var(--line);border-radius:10px;}
+.note{font-family:"DM Mono",monospace;font-size:11px;color:var(--muted);text-align:center;margin-top:16px;line-height:1.7;}
+@media(max-width:520px){.dots{max-width:150px;}.controls{gap:6px;}}
+</style>
+</head>
+<body>
+<div class="watermark" aria-hidden="true"></div>
+<div class="wrap">
+  <header>
+    <h1>Exam 3 — Animated Review</h1>
+    <span class="tagline">Samantha Jeanty · NRS 104 · built from Prof. McEwan's Exam 3 deck · © 2026</span>
+  </header>
+
+  <div class="allprog">
+    <span>Course progress</span>
+    <span class="track"><i id="allBar"></i></span>
+    <span id="allPct">0%</span>
+  </div>
+
+  <div class="menu" id="menu"></div>
+
+  <div class="stage-wrap">
+    <div class="titlebar">
+      <span class="now" id="nowTitle">—</span>
+      <span class="phase" id="phaseTag">Overview</span>
+      <span class="scenecount" id="sceneCount"></span>
+    </div>
+    <div class="stage" id="stage"></div>
+    <div class="progress"><i id="bar"></i></div>
+    <div class="controls">
+      <button class="play" id="playBtn">▶ Play</button>
+      <button id="prevBtn">◀</button>
+      <button id="nextBtn">▶▶</button>
+      <button id="replayBtn">↻ Replay ch.</button>
+      <span class="dots" id="dots"></span>
+      <span class="spacer"></span>
+      <span class="speed">⏩ <select id="rate"><option value="0.8">0.8×</option><option value="0.9">0.9×</option><option value="1" selected>1×</option><option value="1.1">1.1×</option><option value="1.25">1.25×</option></select></span>
+      <label class="toggle"><input type="checkbox" id="ttsToggle" checked> 🔊</label>
+    </div>
+  </div>
+
+  <button class="play" id="toQuiz" style="display:none;margin:16px auto 0;padding:11px 22px;border:none;border-radius:10px;background:var(--amber);color:#3a2a06;font-weight:700;cursor:pointer;font-family:'Space Grotesk';font-size:15px;">📝 Take the Ch. <span id="quizChNum"></span> NCLEX quiz →</button>
+
+  <section class="quizsec" id="quizsec">
+    <h2 id="quizTitle">NCLEX Quiz</h2>
+    <div class="qsub">Answer each question, then read the rationale. These are written to match what Prof. McEwan emphasized.</div>
+    <div id="quizBody"></div>
+    <div class="qscore" id="quizScore">Score: 0 / 0</div>
+  </section>
+
+  <p class="note">Self-playing animated review · narration waits for each line to finish before advancing (nothing gets cut off).<br>
+  ⭐ PROFESSOR FOCUS = emphasized in her review deck · ⚠️ MUST KNOW = exam alert · mini-checkpoints appear mid-video · full NCLEX quiz after each chapter.</p>
+</div>
+
+<script>
+/* ===================== SVG HELPERS ===================== */
+function nurse(x,y,s=1,c="#4fd1c5"){return `<g transform="translate(${x},${y}) scale(${s})" class="bob">
+  <circle cx="0" cy="-58" r="14" fill="none" stroke="${c}" stroke-width="3"/>
+  <rect x="-12" y="-72" width="24" height="9" rx="2" fill="${c}" opacity=".5"/><rect x="-4" y="-70" width="8" height="6" fill="${c}"/><line x1="0" y1="-67" x2="0" y2="-63" stroke="#06231f" stroke-width="2"/>
+  <line x1="0" y1="-44" x2="0" y2="2" stroke="${c}" stroke-width="3"/>
+  <path d="M0 -34 L-22 -12 M0 -34 L22 -20" stroke="${c}" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M0 2 L-14 40 M0 2 L14 40" stroke="${c}" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="-5" cy="-60" r="1.6" fill="#06231f"/><circle cx="5" cy="-60" r="1.6" fill="#06231f"/><path d="M-4 -54 q4 3 8 0" stroke="#06231f" stroke-width="1.4" fill="none"/></g>`;}
+function patient(x,y,s=1,c="#f6c453"){return `<g transform="translate(${x},${y}) scale(${s})">
+  <rect x="-70" y="0" width="170" height="34" rx="6" fill="#2c3845"/><rect x="-78" y="-10" width="20" height="54" rx="4" fill="#3a4a5a"/>
+  <circle cx="-48" cy="-8" r="12" fill="none" stroke="${c}" stroke-width="3" class="breathe"/>
+  <line x1="-36" y1="2" x2="86" y2="2" stroke="${c}" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="-52" cy="-10" r="1.5" fill="${c}"/><circle cx="-44" cy="-10" r="1.5" fill="${c}"/></g>`;}
+function speech(x,y,t){return `<g transform="translate(${x},${y})" class="pop"><rect x="-8" y="-22" width="${t.length*8.4+22}" height="33" rx="9" fill="#fff"/><path d="M2 11 l-8 12 l16 -8 z" fill="#fff"/><text x="4" y="-1" font-family="Space Grotesk" font-size="14.5" font-weight="600" fill="#143">${t}</text></g>`;}
+function box(x,y,w,h,label,color,delay=0){return `<g class="pop" style="animation-delay:${delay}s"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="none" stroke="${color}" stroke-width="2.5"/><text x="${x+w/2}" y="${y+h/2+5}" text-anchor="middle" font-family="Space Grotesk" font-size="13.5" font-weight="600" fill="${color}">${label}</text></g>`;}
+function arrow(x1,y1,x2,y2,c="#8aa0a8",delay=0){const a=Math.atan2(y2-y1,x2-x1)*180/Math.PI;return `<g class="fade" style="animation-delay:${delay}s"><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="2.5"/><path d="M${x2} ${y2} l-9 -3.5 l3.5 9 z" fill="${c}" transform="rotate(${a} ${x2} ${y2})"/></g>`;}
+function title(t,sub){return `<text x="500" y="54" text-anchor="middle" font-family="Caveat" font-size="44" font-weight="700" fill="#f4f1e8" class="fade">${t}</text>${sub?`<text x="500" y="82" text-anchor="middle" font-family="DM Mono" font-size="13.5" fill="#8aa0a8" class="fade" style="animation-delay:.3s">${sub}</text>`:''}`;}
+function lungs(x,y,s=1){return `<g transform="translate(${x},${y}) scale(${s})">
+  <path d="M-6 -30 q-40 5 -42 50 q-2 30 18 36 q22 4 24 -28 z" fill="#ff7a6b" opacity=".18" stroke="#ff7a6b" stroke-width="2.5" class="breathe"/>
+  <path d="M6 -30 q40 5 42 50 q2 30 -18 36 q-22 4 -24 -28 z" fill="#ff7a6b" opacity=".18" stroke="#ff7a6b" stroke-width="2.5" class="breathe"/>
+  <line x1="0" y1="-44" x2="0" y2="-26" stroke="#eaf2f0" stroke-width="3"/><circle cx="0" cy="-48" r="6" fill="none" stroke="#eaf2f0" stroke-width="2.5"/></g>`;}
+function skinLayers(x,y,stage){const cols=["#f6c453","#4fd1c5","#ff7a6b","#b07ad1"];return `<g transform="translate(${x},${y})">
+  <rect x="0" y="0" width="220" height="26" fill="#f3c9a0" stroke="#caa" stroke-width="1"/><text x="232" y="18" font-size="12" fill="#8aa0a8">epidermis</text>
+  <rect x="0" y="26" width="220" height="40" fill="#e8b890" stroke="#caa" stroke-width="1"/><text x="232" y="50" font-size="12" fill="#8aa0a8">dermis</text>
+  <rect x="0" y="66" width="220" height="46" fill="#f6e0b0" stroke="#caa" stroke-width="1"/><text x="232" y="92" font-size="12" fill="#8aa0a8">fat / subcut</text>
+  <rect x="0" y="112" width="220" height="26" fill="#d9d2c2" stroke="#caa" stroke-width="1"/><text x="232" y="130" font-size="12" fill="#8aa0a8">muscle/bone</text></g>`;}
+
+/* ===================== CONTENT =====================
+ scene = {phase, lead, art, cap(html), say(plain), flag?, must?}
+ checkpoint scene = {checkpoint:{q,options,answer,fb}}
+ quiz = [{q,options,answer,rat}]
+*/
+const CH=[
+/* ---------------- CH 38 ---------------- */
+{num:"38",title:"Activity & Exercise",
+ scenes:[
+  {phase:"Overview",lead:"Fast Overview",
+   art:title("Activity &amp; Exercise","Ch. 38 — the big picture")+nurse(230,360,1.4)+box(470,150,420,52,"Body MOVES via 3 systems","#4fd1c5",.3)+box(470,212,420,52,"EXERCISE types &amp; benefits","#f6c453",.6)+box(470,274,420,52,"ACTIVITY TOLERANCE = safety","#ff7a6b",.9),
+   cap:"Chapter 38 in one breath: the body <span class='hl'>moves</span> through three working systems, we classify <span class='ha'>exercise types</span> and their benefits, and we always watch <span class='hc'>activity tolerance</span> to keep patients safe.",
+   say:"Welcome to chapter 38, activity and exercise. Here's the big picture before we dig in. There are three things the professor wants you to own. First, how the body actually moves, using three systems working together. Second, the types of exercise and their benefits. And third, activity tolerance, which is all about patient safety. Keep those three buckets in mind as we go."},
+  {phase:"Core Concepts",lead:"Physiology of Movement",
+   art:title("How the Body Moves")+nurse(230,370,1.3)+box(470,140,430,48,"Skeleton → structure &amp; support","#4fd1c5",.3)+box(470,196,430,48,"Muscles → skeletal, smooth, cardiac","#f6c453",.6)+box(470,252,430,48,"Joints → synovial, cartilaginous, fibrous","#ff7a6b",.9)+box(470,308,430,48,"Nervous system → cortex to muscle","#b07ad1",1.2),
+   cap:"Movement needs the <span class='hl'>skeleton</span> for structure, <span class='ha'>muscles</span> (skeletal, smooth, cardiac), <span class='hc'>joints</span> (synovial, cartilaginous, fibrous) for range of motion, and the <span class='hv'>nervous system</span> directing it from cortex to muscle.",
+   say:"Let's build the core concepts. Movement requires four pieces working together. The skeletal system gives structure and support. Muscles do the work, and there are three kinds: skeletal which is voluntary, smooth which is involuntary, and cardiac. Joints allow range of motion, and you should know the three joint types: synovial, cartilaginous, and fibrous. Finally, the nervous system directs all of it, sending signals from the motor cortex down the spinal cord to the muscles."},
+  {phase:"Core Concepts",lead:"Body Mechanics",must:"MUST KNOW",
+   art:title("Safe Body Mechanics")+nurse(290,365,1.5)+box(560,150,360,52,"WIDE base of support","#4fd1c5",.4)+box(560,212,360,52,"LOW center of gravity","#f6c453",.7)+box(560,274,360,52,"Bend KNEES, back straight","#ff7a6b",1.0)+box(180,150,300,52,"Hold load CLOSE","#b07ad1",1.3),
+   cap:"Protect the back: <span class='hl'>widen your base</span>, keep a <span class='ha'>low center of gravity</span>, <span class='hc'>bend the knees</span> with a straight back, and hold the <span class='hv'>load close</span> to your body.",
+   say:"Body mechanics is a must-know. To protect your back, follow these rules. Widen your base of support by spreading your feet apart. Lower your center of gravity by bending at the knees and hips. Keep your back straight and let the strong leg muscles do the lifting, not your back. And always hold the load close to your body. A wider base plus a lower center of gravity equals more stability."},
+  {checkpoint:{q:"A nurse is about to lift a heavy box. Which action protects the back?",options:["Keep feet together and bend at the waist","Widen stance, bend knees, hold load close","Lift quickly with the arms","Keep the load at arm's length"],answer:1,fb:"Wide base + bent knees + load close = safe mechanics. Bending at the waist strains the back."}},
+  {phase:"Core Concepts",lead:"Exercise Types",
+   art:title("Iso-WHAT? Three Types")+box(70,150,270,86,"ISOTONIC","#4fd1c5",.2)+`<text x="205" y="276" text-anchor="middle" font-size="13" fill="#eaf2f0" class="fade" style="animation-delay:.4s">shortens + MOVES</text><text x="205" y="298" text-anchor="middle" font-size="12" fill="#8aa0a8" class="fade" style="animation-delay:.5s">walking, swimming</text>`+box(365,150,270,86,"ISOMETRIC","#f6c453",.6)+`<text x="500" y="276" text-anchor="middle" font-size="13" fill="#eaf2f0" class="fade" style="animation-delay:.8s">tension, NO movement</text><text x="500" y="298" text-anchor="middle" font-size="12" fill="#8aa0a8" class="fade" style="animation-delay:.9s">cast-bound muscle</text>`+box(660,150,270,86,"ISOKINETIC","#ff7a6b",1.0)+`<text x="795" y="276" text-anchor="middle" font-size="13" fill="#eaf2f0" class="fade" style="animation-delay:1.2s">resistance @ set speed</text><text x="795" y="298" text-anchor="middle" font-size="12" fill="#8aa0a8" class="fade" style="animation-delay:1.3s">PT machines</text>`+`<text x="500" y="380" text-anchor="middle" font-family="Caveat" font-size="26" fill="#4fd1c5" class="fade" style="animation-delay:1.6s">Benefits: ↑cardiac output ↓BP ↑bone density ↑mood</text>`,
+   cap:"<span class='hl'>Isotonic</span> = muscle shortens WITH movement (walking). <span class='ha'>Isometric</span> = tension, NO movement (tightening a cast-bound muscle). <span class='hc'>Isokinetic</span> = resistance at a set speed (PT machines).",
+   say:"Now the exercise types, and these get tested. Isotonic exercise: the muscle shortens with active movement, like walking or swimming. Isometric exercise: there's muscle tension but no movement, like tightening a muscle that's stuck inside a cast. Isokinetic exercise: resistance is applied at a controlled, constant speed, like physical therapy equipment. The benefits of regular exercise are increased cardiac output, lower blood pressure, increased bone density, and improved mood."},
+  {phase:"NCLEX Traps",lead:"Trap Warning",flag:"NCLEX TRAP",
+   art:title("⚠️ The Tolerance Trap")+nurse(250,360,1.4)+speech(330,250,"I'm dizzy...")+box(560,150,360,56,"Dyspnea, dizziness, fatigue = STOP","#ff7a6b",.4)+box(560,220,360,56,"Don't 'push through' for the goal","#f6c453",.8)+box(560,290,360,56,"Drop >20 mmHg systolic = orthostatic","#4fd1c5",1.2),
+   cap:"<span class='hc'>Trap:</span> a question may tempt you to keep a patient walking to 'meet the goal.' If they have <span class='hc'>dyspnea, dizziness, or fatigue — STOP.</span> A systolic drop over 20 mmHg standing = orthostatic hypotension.",
+   say:"Here's an NCLEX trap. The exam loves to tempt you into pushing a patient to finish an activity to meet a goal. Don't fall for it. If the patient develops shortness of breath, dizziness, or fatigue, the correct answer is to stop the activity and let them rest. Also know the number: a systolic blood pressure drop greater than 20 millimeters of mercury when standing is orthostatic hypotension. Assess vital signs before, during, and after activity."},
+  {phase:"Priority Interventions",lead:"Priority Actions",
+   art:title("Before You Ambulate")+nurse(260,360,1.4)+patient(560,340,.9)+box(150,140,300,50,"1. Dangle at bedside FIRST","#4fd1c5",.3)+box(560,130,360,50,"2. Non-skid footwear","#f6c453",.6)+box(560,188,360,50,"3. Gait belt + assist device","#ff7a6b",.9)+box(560,246,360,50,"4. Stop if dizzy / unstable","#b07ad1",1.2),
+   cap:"Priority order to ambulate a deconditioned patient: <span class='hl'>dangle at the bedside FIRST</span>, then non-skid footwear, a gait belt or assistive device, and stop immediately if dizziness or instability appears.",
+   say:"Priority interventions. When you get a patient up after they've been down, the sequence matters. First, dangle them at the bedside so the cardiovascular system can adjust. Then apply non-skid footwear. Use a gait belt and any needed assistive device. And stop right away if the patient becomes dizzy or unsteady. The first action, dangling, is the one the exam asks about most."},
+  {phase:"Memory Tricks",lead:"Memory Trick",
+   art:title("Remember the ISO's")+`<text x="500" y="170" text-anchor="middle" font-family="Caveat" font-size="34" fill="#4fd1c5" class="fade">ToniC = moTION</text><text x="500" y="230" text-anchor="middle" font-family="Caveat" font-size="34" fill="#f6c453" class="fade" style="animation-delay:.5s">Metric = no Movement (Measured still)</text><text x="500" y="290" text-anchor="middle" font-family="Caveat" font-size="34" fill="#ff7a6b" class="fade" style="animation-delay:1.0s">Kinetic = Kinetic energy = speed</text><text x="500" y="370" text-anchor="middle" font-family="DM Mono" font-size="15" fill="#8aa0a8" class="fade" style="animation-delay:1.5s">isoTONIC moves · isoMETRIC stays · isoKINETIC = speed</text>`,
+   cap:"Memory trick: iso<span class='hl'>TONIC</span> sounds like 'mo-TION' → it moves. iso<span class='ha'>METRIC</span> = 'measured but still' → no movement. iso<span class='hc'>KINETIC</span> = kinetic energy → controlled speed.",
+   say:"Let's lock these in with a memory trick. Isotonic — the 'tonic' part sounds like motion, so isotonic means the muscle moves. Isometric — think 'metric,' as in measured but staying still, so isometric means no movement. Isokinetic — kinetic means energy of motion, specifically at a controlled speed, like a machine setting the pace. Tonic moves, metric stays, kinetic is speed."},
+  {phase:"Rapid-Fire",lead:"Rapid-Fire Review",
+   art:title("⚡ Rapid Fire — Ch 38")+`<text x="60" y="140" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein">▸ 3 movement systems? skeletal, muscular, nervous (+ joints)</text><text x="60" y="180" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:.3s">▸ Isotonic = moves · Isometric = still · Isokinetic = speed</text><text x="60" y="220" font-family="Space Grotesk" font-size="16" fill="#ff7a6b" class="slidein" style="animation-delay:.6s">▸ Lift with KNEES, load close, wide base</text><text x="60" y="260" font-family="Space Grotesk" font-size="16" fill="#b07ad1" class="slidein" style="animation-delay:.9s">▸ Orthostatic = systolic drop >20 mmHg standing</text><text x="60" y="300" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein" style="animation-delay:1.2s">▸ Before walking: DANGLE first</text><text x="60" y="340" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:1.5s">▸ Dyspnea/dizzy/fatigue → STOP the activity</text>`,
+   cap:"Rapid fire: movement = skeletal + muscular + nervous + joints · isotonic moves / isometric still / isokinetic speed · lift with knees · orthostatic = >20 mmHg drop · <span class='hl'>dangle before walking</span> · stop if dyspnea or dizzy.",
+   say:"Rapid fire review for chapter 38. The three movement systems: skeletal, muscular, and nervous, plus the joints. Isotonic moves, isometric stays still, isokinetic is controlled speed. Lift with your knees, load close, wide base. Orthostatic hypotension is a systolic drop over twenty millimeters of mercury on standing. Before walking a patient, dangle first. And if they get short of breath, dizzy, or fatigued, stop the activity. That's chapter 38."},
+ ],
+ quiz:[
+  {q:"A patient on bed rest for 5 days needs to ambulate. Which action does the nurse take FIRST?",options:["Apply non-skid footwear","Dangle the patient at the bedside","Obtain a walker","Tell the patient to report dizziness"],answer:1,rat:"Dangling lets the cardiovascular system adjust to upright posture, preventing orthostatic syncope and falls — always first after prolonged bed rest."},
+  {q:"Which is an example of isometric exercise?",options:["Walking on a treadmill","Swimming laps","Tightening the quadriceps without moving the leg","Cycling"],answer:2,rat:"Isometric = muscle tension without joint movement (quad sets). The others are isotonic (movement with shortening)."},
+  {q:"The nurse is teaching about safe lifting. Which instruction is correct?",options:["Bend at the waist","Keep feet together","Use the leg muscles and keep the load close","Twist toward the load"],answer:2,rat:"Use the large leg muscles, keep the back straight, load close, and pivot rather than twist."},
+  {q:"During ambulation a patient reports dizziness and is pale. What is the nurse's priority?",options:["Continue to the set distance","Stop and assist the patient to sit or lie down","Increase the pace to finish quickly","Offer water and keep walking"],answer:1,rat:"Dizziness and pallor signal intolerance — stop the activity and protect the patient from a fall."},
+  {q:"Which finding indicates orthostatic hypotension?",options:["Systolic BP rises 10 mmHg on standing","Systolic BP drops more than 20 mmHg on standing","Heart rate stays the same","Respirations slow on standing"],answer:1,rat:"Orthostatic hypotension is a systolic drop greater than 20 mmHg (or 10 mmHg diastolic) within minutes of standing."},
+  {q:"Which exercise type uses resistance at a controlled, constant speed?",options:["Isotonic","Isometric","Isokinetic","Aerobic"],answer:2,rat:"Isokinetic exercise uses equipment that provides resistance at a set speed (common in physical therapy)."},
+  {q:"Which patient benefits MOST from isometric exercises?",options:["A marathon runner","A patient immobilized in a cast","A swimmer","A cyclist"],answer:1,rat:"Isometric exercise maintains muscle strength without joint movement — ideal when a limb is immobilized."},
+  {q:"Which are benefits of regular exercise? (Select all that apply.)",options:["Increased cardiac output","Lower blood pressure","Increased bone density","Increased risk of osteoporosis"],answer:[0,1,2],rat:"Exercise raises cardiac output, lowers BP, and increases bone density; it REDUCES osteoporosis risk.",sata:true},
+  {q:"To improve stability before a transfer, the nurse should:",options:["Bring the feet close together","Widen the base of support and lower the center of gravity","Keep the knees locked","Hold the patient away from the body"],answer:1,rat:"A wider base and lower center of gravity maximize balance and stability."},
+ ]},
+
+/* ---------------- CH 39 ---------------- */
+{num:"39",title:"Immobility",
+ scenes:[
+  {phase:"Overview",lead:"Fast Overview",
+   art:title("Immobility","Ch. 39 — when patients can't move")+patient(220,300,1.2)+box(470,130,440,46,"Hits EVERY body system","#ff7a6b",.3)+box(470,184,440,46,"Pressure injuries = star topic ⭐","#f6c453",.6)+box(470,238,440,46,"Prevention beats treatment","#4fd1c5",.9),
+   cap:"Chapter 39 fast overview: immobility damages <span class='hc'>every body system</span>, <span class='ha'>pressure injury staging is a starred topic</span>, and the exam rewards knowing <span class='hl'>prevention</span> over treatment.",
+   say:"Chapter 39, immobility. Quick overview. When a patient can't move, the harm spreads to every single body system, so we'll go system by system. The professor heavily emphasized pressure injury staging, so we'll spend real time there. And the theme throughout is that prevention beats treatment. Almost every priority question here is about preventing a complication before it starts."},
+  {phase:"Core Concepts",lead:"Effects by System",
+   art:title("Immobility Hits Everything")+box(60,120,280,42,"Metabolic: ↑catabolism, Ca²⁺ loss","#f6c453",.2)+box(60,168,280,42,"Cardio: DVT, orthostatic ↓BP","#ff7a6b",.4)+box(60,216,280,42,"Resp: atelectasis, pneumonia","#4fd1c5",.6)+box(60,264,280,42,"MSK: atrophy, contractures","#b07ad1",.8)+box(660,120,280,42,"Skin: pressure injuries","#ff7a6b",.5)+box(660,168,280,42,"Urinary: stasis, calculi","#4fd1c5",.7)+box(660,216,280,42,"GI: constipation","#f6c453",.9)+box(660,264,280,42,"Psych: depression","#b07ad1",1.1)+nurse(500,380,1.0),
+   cap:"Every system suffers: <span class='ha'>↑catabolism &amp; calcium loss</span>, <span class='hc'>DVT &amp; orthostatic hypotension</span>, <span class='hl'>atelectasis &amp; pneumonia</span>, muscle atrophy &amp; contractures, <span class='hc'>pressure injuries</span>, renal calculi, constipation, and depression.",
+   say:"Core concepts. Let's hit every system because the professor's slide listed all of them. Metabolic: increased catabolism, a negative nitrogen balance, and calcium loss from the bones. Cardiovascular: orthostatic hypotension and dangerous clots, deep vein thrombosis. Respiratory: shallow breathing causes atelectasis and hypostatic pneumonia. Musculoskeletal: muscle atrophy, contractures, and osteoporosis. Integumentary, the skin: pressure injuries. Urinary: stasis and renal calculi. GI: decreased peristalsis and constipation. And psychosocial: depression, anxiety, and altered sleep."},
+  {phase:"Core Concepts",lead:"Pressure Injury Staging",flag:"PROFESSOR FOCUS",must:"MUST KNOW",
+   art:title("Pressure Injury Stages I–IV")+skinLayers(60,150,1)+box(360,140,280,44,"I: intact, non-blanchable red","#f6c453",.3)+box(360,190,280,44,"II: partial-thickness loss","#4fd1c5",.6)+box(360,240,280,44,"III: full-thickness, fat seen","#ff7a6b",.9)+box(360,290,280,44,"IV: bone / tendon exposed","#ff6b5e",1.2)+box(660,190,300,44,"Unstageable: slough/eschar","#8aa0a8",1.4)+box(660,240,300,44,"DTI: deep purple/maroon","#b07ad1",1.6),
+   cap:"<span class='ha'>Stage I</span>: intact, non-blanchable redness → <span class='hl'>II</span>: partial-thickness → <span class='hc'>III</span>: fat visible → <span style='color:#ff6b5e;font-weight:700'>IV</span>: bone/tendon. <span class='hl'>Unstageable</span> = covered by slough/eschar; <span class='hv'>DTI</span> = deep purple. Never down-stage a healing wound.",
+   say:"Pressure injury staging — this is professor focus and a must-know. Picture the skin layers as the injury goes deeper. Stage one: the skin is intact with non-blanchable redness, meaning it doesn't turn white when you press it. Stage two: partial-thickness skin loss, a shallow open area or blister. Stage three: full-thickness loss where you can see subcutaneous fat. Stage four: the deepest, with bone, tendon, or muscle exposed. Unstageable means slough or eschar covers the base so you can't see how deep it goes. And a deep tissue injury shows as a purple or maroon area. One trap: healing pressure injuries are never reverse-staged or down-staged."},
+  {checkpoint:{q:"A pressure injury shows full-thickness skin loss with visible subcutaneous fat but no exposed bone. What stage is it?",options:["Stage I","Stage II","Stage III","Stage IV"],answer:2,fb:"Stage III = full-thickness loss with fat visible. Exposed bone/tendon would make it Stage IV."}},
+  {phase:"Priority Interventions",lead:"Prevent the Harm",
+   art:title("Prevention Bundle")+nurse(230,365,1.3)+box(470,120,440,46,"Turn &amp; reposition q2h","#4fd1c5",.3)+box(470,172,440,46,"SCDs + anticoagulants → DVT","#ff7a6b",.6)+box(470,224,440,46,"Incentive spirometer 10 breaths/hr","#f6c453",.9)+box(470,276,440,46,"Early ambulation = gold standard","#4fd1c5",1.2)+box(470,328,440,46,"Hydration 2–3 L + high protein/fiber","#b07ad1",1.5),
+   cap:"Prevention bundle: <span class='hl'>turn every 2 hours</span>, <span class='hc'>SCDs + anticoagulants</span> for DVT, <span class='ha'>incentive spirometry 10 breaths/hour</span>, push fluids 2–3 L with protein &amp; fiber, and remember <span class='hl'>early ambulation is the gold standard.</span>",
+   say:"Priority interventions — the prevention bundle. Turn and reposition at least every two hours. Use sequential compression devices plus anticoagulants to prevent deep vein thrombosis. Use the incentive spirometer, ten deep breaths every hour while awake, to prevent atelectasis. Keep the head of bed at or below thirty degrees to reduce shear. Push hydration, two to three liters a day unless restricted, with a high-protein, high-fiber diet to fight constipation and feed healing. And the single best intervention if it's allowed: early ambulation. That's the gold standard."},
+  {phase:"NCLEX Traps",lead:"Trap Warning",flag:"NCLEX TRAP",
+   art:title("⚠️ The DVT Trap")+nurse(250,360,1.3)+`<text x="560" y="160" font-family="Space Grotesk" font-size="16" fill="#ff7a6b" class="slidein">✗ Do NOT massage a red, swollen calf</text><text x="560" y="205" font-family="Space Grotesk" font-size="16" fill="#ff7a6b" class="slidein" style="animation-delay:.4s">✗ Massaging can dislodge a clot → PE</text><text x="560" y="255" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein" style="animation-delay:.8s">✓ Unilateral calf swelling/warmth = assess DVT</text><text x="560" y="300" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:1.2s">✓ Prevent: SCDs, mobility, hydration</text>`,
+   cap:"<span class='hc'>Trap:</span> never massage a red, swollen, warm calf — it can dislodge a clot and cause a pulmonary embolism. <span class='hl'>Unilateral</span> calf swelling and warmth signal possible DVT; report and assess, don't rub.",
+   say:"NCLEX trap, and it's a dangerous one. If a question shows a patient with a red, swollen, warm calf on one side, do not massage it. Massaging a suspected deep vein thrombosis can dislodge the clot and send it to the lungs as a pulmonary embolism, which can be fatal. The correct actions are to recognize that unilateral calf swelling and warmth suggest a DVT, and to report and assess it. Prevention is sequential compression devices, early mobility, and hydration."},
+  {phase:"Memory Tricks",lead:"Memory Trick",
+   art:title("Stage by what you SEE")+`<text x="500" y="150" text-anchor="middle" font-family="Caveat" font-size="32" fill="#f6c453" class="fade">1 = Intact &amp; red (1 layer, unbroken)</text><text x="500" y="205" text-anchor="middle" font-family="Caveat" font-size="32" fill="#4fd1c5" class="fade" style="animation-delay:.5s">2 = Through 2 layers (epidermis→dermis)</text><text x="500" y="260" text-anchor="middle" font-family="Caveat" font-size="32" fill="#ff7a6b" class="fade" style="animation-delay:1.0s">3 = Fat (the 3rd layer)</text><text x="500" y="315" text-anchor="middle" font-family="Caveat" font-size="32" fill="#ff6b5e" class="fade" style="animation-delay:1.5s">4 = 4 = floor = bone/tendon</text>`,
+   cap:"Memory trick — count the depth: <span class='ha'>1</span> intact &amp; red, <span class='hl'>2</span> through two skin layers, <span class='hc'>3</span> you see fat (the 3rd layer), <span style='color:#ff6b5e;font-weight:700'>4</span> = 'the floor' = bone/tendon.",
+   say:"Here's a memory trick for the stages — count by what you see. Stage one, think one unbroken layer: intact skin that's red. Stage two, you've gone through two layers, from epidermis into dermis: partial thickness. Stage three, you reach the third layer, fat: you can see subcutaneous tissue. Stage four, four is the floor: you're all the way down to bone or tendon. One intact, two layers, three fat, four the floor."},
+  {phase:"Rapid-Fire",lead:"Rapid-Fire Review",
+   art:title("⚡ Rapid Fire — Ch 39")+`<text x="60" y="135" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein">▸ Immobility harms EVERY system</text><text x="60" y="173" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:.3s">▸ Stages: I red→II partial→III fat→IV bone</text><text x="60" y="211" font-family="Space Grotesk" font-size="16" fill="#ff7a6b" class="slidein" style="animation-delay:.6s">▸ Unstageable = slough/eschar · DTI = purple</text><text x="60" y="249" font-family="Space Grotesk" font-size="16" fill="#b07ad1" class="slidein" style="animation-delay:.9s">▸ Turn q2h · SCDs · spirometer 10/hr</text><text x="60" y="287" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein" style="animation-delay:1.2s">▸ NEVER massage a suspected DVT</text><text x="60" y="325" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:1.5s">▸ Early ambulation = gold standard</text>`,
+   cap:"Rapid fire: immobility harms every system · stages I→IV by depth · unstageable = covered, DTI = purple · <span class='hl'>turn q2h, SCDs, spirometer</span> · <span class='hc'>never massage a DVT</span> · early ambulation wins.",
+   say:"Rapid fire, chapter 39. Immobility harms every body system. Pressure injury stages go one red, two partial thickness, three fat, four bone. Unstageable means the base is covered by slough or eschar; deep tissue injury is purple or maroon. Prevention: turn every two hours, sequential compression devices, incentive spirometer ten times an hour. Never massage a suspected deep vein thrombosis. And early ambulation is the gold-standard intervention. Done with 39."},
+ ],
+ quiz:[
+  {q:"A patient on bed rest is at risk for DVT. Which intervention is the PRIORITY?",options:["Encourage 2–3 L of fluid daily","Apply sequential compression devices to both legs","Give a prescribed analgesic","Reposition every 4 hours"],answer:1,rat:"SCDs promote venous return and directly counter the venous stasis that causes DVT — the priority preventive action."},
+  {q:"A pressure injury has intact skin with non-blanchable redness over the sacrum. What stage is it?",options:["Stage I","Stage II","Stage III","Unstageable"],answer:0,rat:"Stage I = intact skin with non-blanchable erythema. No skin break yet."},
+  {q:"The nurse notes a unilateral warm, swollen, red calf. What is the BEST action?",options:["Massage the area to improve circulation","Report and assess for possible DVT; do not massage","Apply heat and continue activity","Elevate and vigorously exercise the leg"],answer:1,rat:"These are signs of DVT. Massaging can dislodge a clot causing PE — report and assess instead."},
+  {q:"Which intervention best prevents hypostatic pneumonia in an immobile patient?",options:["Restrict fluids","Incentive spirometry and deep breathing","Keep the patient flat","Limit repositioning"],answer:1,rat:"Incentive spirometry and deep breathing expand alveoli and mobilize secretions, preventing atelectasis and pneumonia."},
+  {q:"A pressure injury is covered with black eschar so depth cannot be seen. This is classified as:",options:["Stage II","Stage III","Unstageable","Deep tissue injury"],answer:2,rat:"Unstageable = full-thickness loss with the base obscured by slough/eschar; depth can't be determined until removed."},
+  {q:"Which dietary change best supports an immobile patient at risk for constipation and skin breakdown?",options:["Low-fiber, low-protein","High-protein, high-fiber with increased fluids","High-fat only","Restrict all fluids"],answer:1,rat:"High protein supports tissue/healing; high fiber and fluids prevent constipation from decreased peristalsis."},
+  {q:"How often should an immobile, at-risk patient be repositioned?",options:["Every 2 hours","Every 6 hours","Once per shift","Only when uncomfortable"],answer:0,rat:"At least every 2 hours to relieve pressure over bony prominences and prevent injury."},
+  {q:"Which are hazards of immobility? (Select all that apply.)",options:["Deep vein thrombosis","Pressure injuries","Increased bone density","Constipation"],answer:[0,1,3],rat:"Immobility causes DVT, pressure injuries, and constipation. Bone density DECREASES (disuse osteoporosis)."},
+  {q:"A purple, non-blanchable, intact area over the heel is best documented as:",options:["Stage I","Deep tissue injury","Stage III","Stage IV"],answer:1,rat:"Deep tissue injury = persistent deep red/maroon/purple discoloration from pressure damage to underlying tissue."},
+  {q:"Which is the gold-standard intervention to prevent complications of immobility when permitted?",options:["Bed rest","Early ambulation","Fluid restriction","Continuous knee elevation"],answer:1,rat:"Early ambulation addresses cardiovascular, respiratory, GI, musculoskeletal, and skin risks all at once."},
+ ]},
+
+/* ---------------- CH 40 ---------------- */
+{num:"40",title:"Hygiene",
+ scenes:[
+  {phase:"Overview",lead:"Fast Overview",
+   art:title("Hygiene","Ch. 40 — personal, safe, dignified")+nurse(230,360,1.4)+patient(560,340,.95)+box(470,140,440,46,"Personal &amp; non-judgmental care","#4fd1c5",.3)+box(470,194,440,46,"Safety: temp, aspiration, diabetics","#ff7a6b",.6)+box(470,248,440,46,"Assess skin during every bath","#f6c453",.9),
+   cap:"Chapter 40 overview: hygiene is <span class='hl'>personal — give it without judgment</span>, watch <span class='hc'>safety</span> (water temp, aspiration, diabetic feet), and <span class='ha'>use every bath to assess the skin.</span>",
+   say:"Chapter 40, hygiene. Overview. Three ideas to carry through. First, hygiene is deeply personal, shaped by culture, religion, finances, and health, so we provide it without judgment. Second, hygiene is full of safety questions: water temperature, aspiration risk during oral care, and special rules for diabetic feet. Third, every bath is also a skin assessment — never waste that chance to look at the skin."},
+  {phase:"Core Concepts",lead:"Hygiene Principles",
+   art:title("The Numbers That Get Tested")+box(120,150,360,52,"Bath water 43–46°C (110–115°F)","#4fd1c5",.3)+box(520,150,360,52,"Perineal care: FRONT → BACK","#ff7a6b",.6)+box(120,222,360,52,"Oral care BID–TID","#f6c453",.9)+box(520,222,360,52,"Unconscious oral care q2h","#b07ad1",1.2)+box(250,294,500,52,"Cut nails STRAIGHT across","#4fd1c5",1.5),
+   cap:"Know the numbers: bath water <span class='hl'>43–46°C (110–115°F)</span>, perineal care <span class='hc'>front to back</span>, oral care BID–TID (unconscious every 2 hours), and cut nails <span class='ha'>straight across.</span>",
+   say:"Core concepts, and these are the testable numbers. Bath water should be 43 to 46 degrees Celsius, which is 110 to 115 Fahrenheit; check it with a thermometer or your wrist. Perineal care is always done front to back to prevent urinary tract infection. Brush teeth twice to three times a day, and for an unconscious patient provide oral care every two hours. And when you trim nails, cut them straight across to prevent ingrown nails."},
+  {phase:"NCLEX Traps",lead:"Trap Warning",flag:"NCLEX TRAP",must:"MUST KNOW",
+   art:title("⚠️ Unconscious Oral Care")+`<g transform="translate(400,290)"><rect x="-120" y="0" width="280" height="32" rx="6" fill="#2c3845"/><circle cx="-95" cy="-12" r="13" fill="none" stroke="#f6c453" stroke-width="3" class="breathe"/><text x="30" y="-58" text-anchor="middle" font-family="Caveat" font-size="28" fill="#4fd1c5" class="fade">turn head to the SIDE</text></g>`+box(560,360,360,44,"Suction at bedside","#ff7a6b",.6)+box(120,378,340,44,"Side-lying, never supine","#f6c453",.9),
+   cap:"<span class='hc'>Trap:</span> oral care on an unconscious patient must be <span class='hl'>side-lying with the head turned to the side</span>, with <span class='hc'>suction ready</span> — never flat on the back. This prevents <span class='hc'>aspiration.</span>",
+   say:"Here's a classic NCLEX trap. For oral care on an unconscious patient, the position is everything. Place the patient side-lying with the head turned to the side so fluids drain out of the mouth, and keep suction available at the bedside. Never lay them flat on their back for oral care, because that leads to aspiration. The exam will offer 'supine' as a tempting wrong answer. Choose side-lying."},
+  {checkpoint:{q:"How should the nurse position an unconscious patient for oral care?",options:["Supine and flat","Side-lying with head turned to the side","High Fowler's","Trendelenburg"],answer:1,fb:"Side-lying with the head turned lets fluid drain and prevents aspiration. Keep suction ready."}},
+  {phase:"Priority Interventions",lead:"Diabetic Foot Care",flag:"PROFESSOR FOCUS",
+   art:title("Diabetic Foot Care Rules")+nurse(230,360,1.3)+box(470,130,440,46,"Inspect feet DAILY, between toes","#4fd1c5",.3)+box(470,182,440,46,"Wash warm (not hot); pat dry","#f6c453",.6)+box(470,234,440,46,"Refer nail care to PODIATRY","#ff7a6b",.9)+box(470,286,440,46,"NO bare feet, NO heating pads","#b07ad1",1.2),
+   cap:"Diabetic foot care: <span class='hl'>inspect daily including between the toes</span>, wash in warm water, <span class='hc'>refer nail care to podiatry</span>, and never go barefoot or use heating pads — neuropathy hides injuries.",
+   say:"Priority interventions for diabetic foot care, a professor focus. Teach the patient to inspect their feet every day, including between the toes, because neuropathy means they may not feel an injury. Wash with warm, not hot, water and pat dry. Refer nail care to a podiatrist and never cut ingrown nails. And no bare feet, no heating pads — both can cause unnoticed burns or wounds. For patients on anticoagulants, by the way, always use an electric razor."},
+  {phase:"Memory Tricks",lead:"Memory Trick",
+   art:title("Wipe the right way")+`<text x="500" y="170" text-anchor="middle" font-family="Caveat" font-size="36" fill="#ff7a6b" class="fade">FRONT to BACK</text><text x="500" y="220" text-anchor="middle" font-family="Caveat" font-size="28" fill="#4fd1c5" class="fade" style="animation-delay:.5s">'clean to dirty' — urethra away from rectum</text><text x="500" y="290" text-anchor="middle" font-family="Caveat" font-size="28" fill="#f6c453" class="fade" style="animation-delay:1.0s">Bathe: face first → perineum LAST</text>`,
+   cap:"Memory trick: always wipe and bathe <span class='hc'>clean to dirty</span> — perineal care <span class='hl'>front to back</span> (urethra away from rectum), and a bed bath goes <span class='ha'>face first, perineum last.</span>",
+   say:"Memory trick for hygiene direction: clean to dirty, every time. Perineal care goes front to back, moving from the urethra away from the rectum, so you never drag bacteria toward the urinary opening. And the whole bed bath follows the same logic: start with the cleanest area, the eyes and face, and finish with the dirtiest, the perineum, last."},
+  {phase:"Rapid-Fire",lead:"Rapid-Fire Review",
+   art:title("⚡ Rapid Fire — Ch 40")+`<text x="60" y="140" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein">▸ Bath water 43–46°C (110–115°F)</text><text x="60" y="180" font-family="Space Grotesk" font-size="16" fill="#ff7a6b" class="slidein" style="animation-delay:.3s">▸ Perineal care front → back</text><text x="60" y="220" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:.6s">▸ Unconscious oral care: side-lying + suction</text><text x="60" y="260" font-family="Space Grotesk" font-size="16" fill="#b07ad1" class="slidein" style="animation-delay:.9s">▸ Cut nails straight across</text><text x="60" y="300" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein" style="animation-delay:1.2s">▸ Diabetics: podiatry, inspect daily, no heat</text><text x="60" y="340" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:1.5s">▸ Anticoagulant → electric razor</text>`,
+   cap:"Rapid fire: water 43–46°C · perineal front→back · <span class='hl'>unconscious oral care side-lying + suction</span> · nails straight across · diabetics see podiatry · anticoagulant = electric razor.",
+   say:"Rapid fire, chapter 40. Bath water 43 to 46 degrees Celsius. Perineal care front to back. Unconscious oral care: side-lying with suction ready. Cut nails straight across. Diabetic patients: inspect feet daily, refer to podiatry, no bare feet or heating pads. And patients on anticoagulants get an electric razor. That's hygiene."},
+ ],
+ quiz:[
+  {q:"Which is the MOST important instruction for diabetic foot care?",options:["Soak feet 30 minutes daily","Inspect feet daily, including between the toes","Trim nails into a rounded shape","Use a heating pad for circulation"],answer:1,rat:"Daily inspection catches injuries the patient may not feel due to neuropathy — the most critical teaching."},
+  {q:"How should the nurse position an unconscious patient for oral care?",options:["Supine","Side-lying with head turned to the side","Prone","High Fowler's flat"],answer:1,rat:"Side-lying with the head turned allows secretions to drain and prevents aspiration; keep suction available."},
+  {q:"What is the appropriate temperature for bath water?",options:["Cold to stimulate circulation","43–46°C (110–115°F)","As hot as tolerated","Room temperature"],answer:1,rat:"Comfortably warm water (43–46°C) prevents burns and chilling; always verify temperature."},
+  {q:"When providing female perineal care, the nurse cleans:",options:["Back to front","Front to back","In a circular scrub","With antiseptic only"],answer:1,rat:"Front to back moves from the urethra toward the rectum, preventing UTI."},
+  {q:"A patient is on anticoagulant therapy and needs shaving. The nurse uses:",options:["A straight razor","An electric razor","A double-blade razor","No shaving allowed ever"],answer:1,rat:"Electric razors prevent nicks and bleeding in patients at bleeding risk."},
+  {q:"Which nail-care action is correct for a patient with diabetes?",options:["Cut ingrown nails at the bedside","Refer nail care to podiatry","Cut nails in a deep curve","Use a heating pad to soften nails"],answer:1,rat:"Because of neuropathy and poor circulation, diabetic nail care is referred to podiatry; nurses do not cut ingrown nails."},
+  {q:"During a complete bed bath, the nurse washes:",options:["Perineum first","From cleanest (face) to dirtiest (perineum)","In random order","Dirtiest area first"],answer:1,rat:"Bathe clean to dirty to limit spread of microorganisms; perineum is last."},
+  {q:"Why is moisture on the skin a concern?",options:["It strengthens skin","It is a medium for bacterial growth and causes maceration","It improves turgor","It has no effect"],answer:1,rat:"Moisture macerates skin and supports bacterial growth, raising breakdown risk — keep skin clean and dry."},
+  {q:"Which are appropriate hygiene principles? (Select all that apply.)",options:["Provide privacy and dignity","Assess skin during the bath","Use the same cool water throughout","Encourage independence when able"],answer:[0,1,3],rat:"Protect dignity, assess skin, and promote independence. Water should be changed when soiled or cool."},
+ ]},
+
+/* ---------------- CH 48 ---------------- */
+{num:"48",title:"Skin Integrity & Wound Care",
+ scenes:[
+  {phase:"Overview",lead:"Fast Overview",
+   art:title("Skin Integrity &amp; Wound Care","Ch. 48 — how wounds heal")+box(470,140,440,46,"Healing types &amp; phases ⭐","#4fd1c5",.3)+box(470,194,440,46,"Dressings matched to wounds","#f6c453",.6)+box(470,248,440,46,"Dehiscence vs evisceration","#ff7a6b",.9)+nurse(230,360,1.3),
+   cap:"Chapter 48 overview: <span class='hl'>healing by intention and the phases</span>, <span class='ha'>matching dressings to wounds</span>, and the emergency difference between <span class='hc'>dehiscence and evisceration.</span>",
+   say:"Chapter 48, skin integrity and wound care. Overview. Three focus areas. First, how wounds heal: the types of healing by intention and the phases of healing — that's starred. Second, matching the right dressing to the right wound. And third, two complications you must tell apart: dehiscence, where the wound edges separate, versus evisceration, where organs protrude, which is an emergency."},
+  {phase:"Core Concepts",lead:"Healing by Intention",flag:"PROFESSOR FOCUS",
+   art:title("Primary · Secondary · Tertiary")+box(70,150,270,80,"PRIMARY","#4fd1c5",.2)+`<text x="205" y="272" text-anchor="middle" font-size="13" fill="#eaf2f0" class="fade" style="animation-delay:.4s">sutured, edges together</text>`+box(365,150,270,80,"SECONDARY","#f6c453",.6)+`<text x="500" y="272" text-anchor="middle" font-size="13" fill="#eaf2f0" class="fade" style="animation-delay:.8s">open, granulates in</text>`+box(660,150,270,80,"TERTIARY","#ff7a6b",1.0)+`<text x="795" y="272" text-anchor="middle" font-size="13" fill="#eaf2f0" class="fade" style="animation-delay:1.2s">delayed closure</text>`+`<text x="500" y="345" text-anchor="middle" font-family="Caveat" font-size="25" fill="#b07ad1" class="fade" style="animation-delay:1.5s">Phases: hemostasis → inflammation → proliferation → remodeling</text>`,
+   cap:"<span class='hl'>Primary</span> = sutured, edges approximated. <span class='ha'>Secondary</span> = left open, heals by granulation. <span class='hc'>Tertiary</span> = delayed closure. Phases: <span class='hv'>hemostasis → inflammation → proliferation → remodeling.</span>",
+   say:"Core concepts, professor focus. Healing by intention, three types. Primary intention: a clean wound with edges approximated, like a sutured surgical incision — heals fast. Secondary intention: the wound is left open and fills in from the bottom by granulation, like a pressure injury — slower, more scarring. Tertiary intention: delayed closure, where the wound is left open for a while, often due to infection, then closed later. And memorize the four phases of healing in order: hemostasis, inflammation, proliferation, and remodeling."},
+  {phase:"NCLEX Traps",lead:"Trap Warning",flag:"NCLEX TRAP",must:"MUST KNOW",
+   art:title("⚠️ Dehiscence vs Evisceration")+box(120,150,360,70,"DEHISCENCE","#f6c453",.3)+`<text x="300" y="245" text-anchor="middle" font-size="13.5" fill="#eaf2f0" class="fade" style="animation-delay:.5s">edges SEPARATE, no organs</text>`+box(520,150,360,70,"EVISCERATION","#ff6b5e",.6)+`<text x="700" y="245" text-anchor="middle" font-size="13.5" fill="#eaf2f0" class="fade" style="animation-delay:.8s">organs PROTRUDE = EMERGENCY</text>`+`<text x="500" y="320" text-anchor="middle" font-family="Caveat" font-size="26" fill="#4fd1c5" class="fade" style="animation-delay:1.2s">Evisceration → cover with sterile saline gauze, call provider</text>`,
+   cap:"<span class='hc'>Trap:</span> <span class='ha'>dehiscence</span> = wound edges separate (no organs). <span style='color:#ff6b5e;font-weight:700'>Evisceration</span> = organs protrude — a <span class='hc'>surgical emergency</span>: cover with sterile saline-soaked gauze and call the provider.",
+   say:"NCLEX trap, must know. Two words that sound similar but mean very different things. Dehiscence is when the wound edges separate or split open, but no organs are showing. Evisceration is when internal organs actually protrude through the wound — that is a surgical emergency. If you see evisceration, the priority nursing action is to cover the organs with sterile gauze moistened with normal saline and notify the provider immediately. Do not push the organs back in."},
+  {checkpoint:{q:"The nurse finds abdominal organs protruding through a separated surgical wound. What is the FIRST action?",options:["Push the organs back in","Cover with sterile saline-soaked gauze and call the provider","Apply a dry pressure dressing","Reposition and document only"],answer:1,fb:"Evisceration is an emergency: cover with sterile moist gauze and notify the provider. Never push organs back in."}},
+  {phase:"Priority Interventions",lead:"Dressings & Braden",
+   art:title("Match Dressing · Prevent Injury")+box(70,135,400,46,"Wet-to-dry → débrides necrotic","#f6c453",.2)+box(70,187,400,46,"Hydrocolloid → moist healing","#4fd1c5",.5)+box(70,239,400,46,"Alginate → heavy drainage","#ff7a6b",.8)+box(530,135,400,46,"Irrigate with NORMAL SALINE","#4fd1c5",.6)+box(530,187,400,46,"Braden ≤18 = at risk","#f6c453",.9)+box(530,239,400,46,"Nutrition: protein, vit C, zinc","#b07ad1",1.2),
+   cap:"Match the dressing — <span class='ha'>wet-to-dry</span> débrides, <span class='hl'>hydrocolloid</span> keeps it moist, <span class='hc'>alginate</span> for heavy drainage; irrigate with <span class='hl'>normal saline</span>. <span class='ha'>Braden ≤18 = at risk</span>; heal with protein, vitamin C, zinc.",
+   say:"Priority interventions. Match the dressing to the wound. Wet-to-dry dressings provide mechanical debridement of necrotic tissue. Hydrocolloid dressings promote moist wound healing. Alginate dressings are highly absorptive for heavy drainage. Irrigate wounds with normal saline as first-line. For prevention, use the Braden Scale: a score of eighteen or below means at risk. And support healing with adequate protein, vitamin C, and zinc."},
+  {phase:"Memory Tricks",lead:"Memory Trick",
+   art:title("Primary vs Secondary")+`<text x="500" y="165" text-anchor="middle" font-family="Caveat" font-size="32" fill="#4fd1c5" class="fade">PRIMARY = Pulled together (sutured)</text><text x="500" y="220" text-anchor="middle" font-family="Caveat" font-size="32" fill="#f6c453" class="fade" style="animation-delay:.5s">SECONDARY = Stays open (granulates)</text><text x="500" y="275" text-anchor="middle" font-family="Caveat" font-size="32" fill="#ff7a6b" class="fade" style="animation-delay:1.0s">TERTIARY = Tarries / delayed</text><text x="500" y="345" text-anchor="middle" font-family="DM Mono" font-size="15" fill="#8aa0a8" class="fade" style="animation-delay:1.5s">eVISCERation = VISCERA (organs) out = emergency</text>`,
+   cap:"Memory trick: <span class='hl'>Primary = Pulled together</span> (sutured), <span class='ha'>Secondary = Stays open</span> (granulates), <span class='hc'>Tertiary = Tarries</span> (delayed). And e<span style='color:#ff6b5e'>VISCER</span>ation = <span class='hc'>viscera</span> (organs) out = emergency.",
+   say:"Memory tricks. For healing types, use the matching first letters. Primary equals pulled together — the edges are sutured. Secondary equals stays open — it granulates in from the bottom. Tertiary equals tarries — closure is delayed. And to keep dehiscence and evisceration straight: evisceration contains the word viscera, which means organs, so evisceration is organs coming out — the emergency."},
+  {phase:"Rapid-Fire",lead:"Rapid-Fire Review",
+   art:title("⚡ Rapid Fire — Ch 48")+`<text x="60" y="135" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein">▸ Primary=sutured · Secondary=open · Tertiary=delayed</text><text x="60" y="173" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:.3s">▸ Phases: hemostasis→inflammation→prolif→remodel</text><text x="60" y="211" font-family="Space Grotesk" font-size="16" fill="#ff7a6b" class="slidein" style="animation-delay:.6s">▸ Dehiscence=edges open · Evisceration=organs out</text><text x="60" y="249" font-family="Space Grotesk" font-size="16" fill="#b07ad1" class="slidein" style="animation-delay:.9s">▸ Evisceration → sterile saline gauze + call MD</text><text x="60" y="287" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein" style="animation-delay:1.2s">▸ Irrigate with normal saline · Braden ≤18 at risk</text><text x="60" y="325" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:1.5s">▸ Heal with protein, vit C, zinc</text>`,
+   cap:"Rapid fire: primary/secondary/tertiary · phases hemostasis→remodel · <span class='hc'>dehiscence vs evisceration</span> · evisceration = sterile saline gauze + call MD · normal saline irrigation · Braden ≤18 · protein/C/zinc.",
+   say:"Rapid fire, chapter 48. Healing: primary is sutured, secondary stays open, tertiary is delayed. Phases: hemostasis, inflammation, proliferation, remodeling. Dehiscence is edges separating; evisceration is organs protruding. For evisceration, cover with sterile saline-soaked gauze and call the provider. Irrigate wounds with normal saline. Braden score of eighteen or below is at risk. Heal with protein, vitamin C, and zinc. That's 48."},
+ ],
+ quiz:[
+  {q:"A surgical incision with clean, approximated, sutured edges heals by:",options:["Primary intention","Secondary intention","Tertiary intention","Granulation only"],answer:0,rat:"Primary intention: clean wound, edges approximated (sutured) — minimal tissue loss, fastest healing."},
+  {q:"The nurse finds separated wound edges with no organs visible. This is:",options:["Evisceration","Dehiscence","Tunneling","Undermining"],answer:1,rat:"Dehiscence = partial/total separation of wound layers. Organs protruding would be evisceration."},
+  {q:"With evisceration, the FIRST nursing action is to:",options:["Push the organs back in","Cover with sterile saline-moistened gauze and notify provider","Apply a dry dressing and discharge","Document and reassess in 1 hour"],answer:1,rat:"Cover protruding organs with sterile moist gauze to keep tissue viable and call the provider — surgical emergency."},
+  {q:"Which dressing provides mechanical débridement of necrotic tissue?",options:["Hydrocolloid","Transparent film","Wet-to-dry","Alginate"],answer:2,rat:"Wet-to-dry dressings mechanically débride necrotic tissue when removed (can be painful)."},
+  {q:"An open wound healing by granulation, contraction, and epithelialization heals by:",options:["Primary intention","Secondary intention","Tertiary intention","No healing"],answer:1,rat:"Secondary intention: wounds with tissue loss left open heal by granulation — slower, more scar."},
+  {q:"Which solution is first-line for wound irrigation?",options:["Hydrogen peroxide","Normal saline","Povidone-iodine","Alcohol"],answer:1,rat:"Normal saline is isotonic and non-cytotoxic — the standard first-line irrigant."},
+  {q:"On the Braden Scale, a LOWER score indicates:",options:["Lower risk","Higher risk for pressure injury","No risk","Healed skin"],answer:1,rat:"Lower Braden score = higher risk; ≤18 flags a patient at risk for pressure injury."},
+  {q:"Which nutrients best support wound healing? (Select all that apply.)",options:["Protein","Vitamin C","Zinc","Simple sugars only"],answer:[0,1,2],rat:"Protein, vitamin C, and zinc support collagen synthesis and tissue repair."},
+  {q:"A wound with thick yellow-green drainage and foul odor most likely indicates:",options:["Normal healing","Infection (purulent drainage)","Serous drainage","Granulation"],answer:1,rat:"Purulent (thick, colored, foul) drainage indicates infection and needs follow-up."},
+  {q:"Place wound-healing phases in order:",options:["Inflammation → hemostasis → remodeling → proliferation","Hemostasis → inflammation → proliferation → remodeling","Proliferation → hemostasis → inflammation → remodeling","Remodeling → proliferation → inflammation → hemostasis"],answer:1,rat:"Order: hemostasis, inflammation, proliferation, remodeling."},
+ ]},
+
+/* ---------------- CH 41 ---------------- */
+{num:"41",title:"Oxygenation",
+ scenes:[
+  {phase:"Overview",lead:"Fast Overview",
+   art:title("Oxygenation","Ch. 41 — get O₂ in, move it, deliver it")+lungs(250,300,1.4)+box(470,140,440,46,"Ventilation · Diffusion · Perfusion","#4fd1c5",.3)+box(470,194,440,46,"O₂ devices &amp; flows ⭐","#f6c453",.6)+box(470,248,440,46,"COPD = special target ⭐","#ff7a6b",.9),
+   cap:"Chapter 41 overview: the three steps — <span class='hl'>ventilation, diffusion, perfusion</span> — then <span class='ha'>oxygen devices and their flow rates</span>, and the special <span class='hc'>COPD oxygen target.</span>",
+   say:"Chapter 41, oxygenation. Overview. We move oxygen in three steps: ventilation, air moving in and out; diffusion, gas exchange at the alveoli; and perfusion, blood carrying it away. Then the two heavily tested areas: oxygen delivery devices with their flow rates, and the special oxygen target for COPD patients. Both are professor-flagged, so we'll go slow on those."},
+  {phase:"Core Concepts",lead:"Respiratory Physiology",
+   art:title("V · D · P + the Numbers")+lungs(220,300,1.3)+box(470,130,440,46,"Ventilation = air in/out","#4fd1c5",.3)+box(470,182,440,46,"Diffusion = gas exchange @ alveoli","#f6c453",.6)+box(470,234,440,46,"Perfusion = blood flow to lungs","#ff7a6b",.9)+box(470,286,440,46,"SpO₂ 95–100% · RR 12–20","#b07ad1",1.2),
+   cap:"<span class='hl'>Ventilation</span> moves air, <span class='ha'>diffusion</span> exchanges gas at the alveoli, <span class='hc'>perfusion</span> is blood flow. Normal <span class='hv'>SpO₂ 95–100%, RR 12–20.</span> Restlessness is the FIRST sign of hypoxia.",
+   say:"Core concepts. Three words. Ventilation is the movement of air in and out of the lungs. Diffusion is gas exchange across the alveolar-capillary membrane. Perfusion is blood flow through the pulmonary circulation. Know the normals: oxygen saturation 95 to 100 percent, with concern below 90; respiratory rate 12 to 20 in adults. And remember this one because it's tested constantly: restlessness is often the very first sign of hypoxia, before cyanosis ever appears."},
+  {phase:"Core Concepts",lead:"O₂ Delivery Devices",flag:"PROFESSOR FOCUS",must:"MUST KNOW",
+   art:title("Oxygen Devices &amp; Flows")+box(60,135,420,44,"Nasal cannula 1–6 L → 24–44%","#4fd1c5",.2)+box(60,187,420,44,"Simple mask 5–8 L → 40–60%","#f6c453",.5)+box(60,239,420,44,"Partial rebreather 6–10 L → 60–75%","#f6c453",.8)+box(520,135,420,44,"Non-rebreather 10–15 L → 90–95%","#ff7a6b",.6)+box(520,187,420,44,"Venturi → PRECISE FiO₂ (COPD)","#4fd1c5",.9)+box(520,239,420,44,"Suction ≤10–15 sec/pass","#b07ad1",1.2),
+   cap:"<span class='hl'>Nasal cannula 1–6 L</span> (24–44%) · simple mask 5–8 L (min 5 to flush CO₂) · <span class='hc'>non-rebreather 10–15 L</span> (up to 95%) · <span class='hl'>Venturi = precise FiO₂, best for COPD.</span> Suction ≤10–15 sec.",
+   say:"Oxygen delivery devices, professor focus and must-know. Memorize the flows. Nasal cannula: one to six liters per minute, delivering twenty-four to forty-four percent oxygen. Simple face mask: five to eight liters, and you need at least five to flush out carbon dioxide. Partial rebreather mask: six to ten liters, sixty to seventy-five percent. Non-rebreather mask: ten to fifteen liters, the highest, up to ninety to ninety-five percent. Venturi mask delivers the most precise, fixed oxygen concentration, which makes it the best choice for COPD. And when suctioning, never apply suction longer than ten to fifteen seconds per pass."},
+  {checkpoint:{q:"Which oxygen device delivers the HIGHEST concentration?",options:["Nasal cannula","Simple face mask","Non-rebreather mask","Venturi mask at low setting"],answer:2,fb:"The non-rebreather, with its reservoir bag and one-way valves, delivers up to 90–95% O₂."}},
+  {phase:"NCLEX Traps",lead:"Trap Warning",flag:"NCLEX TRAP",
+   art:title("⚠️ The COPD Oxygen Trap")+lungs(230,300,1.2)+box(470,140,450,52,"COPD → keep SpO₂ 88–92%","#ff7a6b",.3)+box(470,204,450,52,"High-flow O₂ can STOP their drive","#f6c453",.7)+box(470,268,450,52,"Don't aim for 95–100% in COPD","#4fd1c5",1.1),
+   cap:"<span class='hc'>Trap:</span> in COPD, the target is <span class='hl'>SpO₂ 88–92%</span>, NOT 95–100%. They rely on hypoxic drive, so <span class='hc'>high-flow oxygen can suppress breathing</span> and cause CO₂ retention.",
+   say:"Here's the COPD oxygen trap, and it catches a lot of students. For most patients you want a high oxygen saturation. But for a COPD patient, the target is eighty-eight to ninety-two percent, not ninety-five to one hundred. Why? Chronic COPD patients rely on a hypoxic drive to breathe. If you flood them with high-flow oxygen, you can knock out that drive and actually suppress their breathing, leading to carbon dioxide retention. So if a question offers 'increase the oxygen' or 'keep sat 95 to 100' for a COPD patient, that's the wrong answer."},
+  {phase:"Priority Interventions",lead:"Positioning & Airway",
+   art:title("Help Them Breathe")+nurse(240,360,1.3)+box(470,130,450,46,"Sit up: semi/high-Fowler's","#4fd1c5",.3)+box(470,182,450,46,"Orthopneic (tripod) for COPD","#f6c453",.6)+box(470,234,450,46,"Hyperoxygenate BEFORE suction","#ff7a6b",.9)+box(470,286,450,46,"Hydration + cough/deep breathe","#b07ad1",1.2),
+   cap:"Priority: <span class='hl'>sit them up</span> (semi/high-Fowler's), use the <span class='ha'>orthopneic tripod position</span> for COPD, <span class='hc'>hyperoxygenate before suctioning</span>, and use hydration plus coughing and deep breathing to clear secretions.",
+   say:"Priority interventions for oxygenation. Position first — it's free and fast. Sit the patient up in semi-Fowler's or high-Fowler's to drop the diaphragm and expand the lungs. For COPD, the orthopneic or tripod position, leaning forward over a table, works best. Before suctioning, always hyperoxygenate the patient, and limit each pass to ten to fifteen seconds. Keep them hydrated to thin secretions, and encourage coughing and deep breathing to clear the airway."},
+  {phase:"Memory Tricks",lead:"Memory Trick",
+   art:title("Remember COPD &amp; Hypoxia")+`<text x="500" y="160" text-anchor="middle" font-family="Caveat" font-size="32" fill="#ff7a6b" class="fade">COPD = 88–92 ('lower &amp; slower O₂')</text><text x="500" y="225" text-anchor="middle" font-family="Caveat" font-size="32" fill="#4fd1c5" class="fade" style="animation-delay:.6s">Hypoxia 1st sign = RESTLESS</text><text x="500" y="290" text-anchor="middle" font-family="Caveat" font-size="28" fill="#f6c453" class="fade" style="animation-delay:1.1s">'Restless &amp; anxious before blue'</text>`,
+   cap:"Memory trick: COPD = <span class='hl'>88–92</span>, think 'lower and slower oxygen.' And hypoxia's <span class='hc'>first sign is RESTLESSNESS</span> — 'restless and anxious before blue' (cyanosis is late).",
+   say:"Memory tricks. For COPD oxygen, think lower and slower: eighty-eight to ninety-two percent, give oxygen cautiously. For hypoxia, remember the phrase 'restless and anxious before blue.' Restlessness, anxiety, and confusion are the early signs. Cyanosis, the blue color, is a late sign. So if a patient on oxygen suddenly gets restless or agitated, suspect hypoxia first — don't wait for them to turn blue."},
+  {phase:"Rapid-Fire",lead:"Rapid-Fire Review",
+   art:title("⚡ Rapid Fire — Ch 41")+`<text x="60" y="135" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein">▸ Ventilation · Diffusion · Perfusion</text><text x="60" y="173" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:.3s">▸ Cannula 1–6L · NRB 10–15L (highest) · Venturi=precise</text><text x="60" y="211" font-family="Space Grotesk" font-size="16" fill="#ff7a6b" class="slidein" style="animation-delay:.6s">▸ COPD target 88–92% (not 95–100)</text><text x="60" y="249" font-family="Space Grotesk" font-size="16" fill="#b07ad1" class="slidein" style="animation-delay:.9s">▸ Restlessness = 1st sign hypoxia · cyanosis = late</text><text x="60" y="287" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein" style="animation-delay:1.2s">▸ Suction ≤10–15 sec, hyperoxygenate first</text><text x="60" y="325" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:1.5s">▸ Sit up to breathe · tripod for COPD</text>`,
+   cap:"Rapid fire: V/D/P · cannula 1–6L, NRB highest, Venturi precise · <span class='hc'>COPD 88–92%</span> · <span class='hl'>restlessness = first hypoxia sign</span> · suction ≤15 sec · sit up / tripod.",
+   say:"Rapid fire, chapter 41. Ventilation, diffusion, perfusion. Nasal cannula one to six liters; non-rebreather ten to fifteen liters is the highest; Venturi gives a precise concentration. COPD oxygen target is eighty-eight to ninety-two percent, not ninety-five to one hundred. Restlessness is the first sign of hypoxia; cyanosis is late. Suction no more than ten to fifteen seconds and hyperoxygenate first. Sit patients up to breathe, tripod position for COPD. That's oxygenation."},
+ ],
+ quiz:[
+  {q:"A nurse is teaching a COPD patient about home oxygen. Which statement shows understanding?",options:["'I'll turn my oxygen up if I feel short of breath'","'I should keep my sat at 95–100%'","'I'll keep my oxygen saturation 88–92%'","'It's fine to smoke if the oxygen is off'"],answer:2,rat:"COPD patients rely on hypoxic drive; target SpO₂ is 88–92%. High-flow O₂ can suppress respiration."},
+  {q:"Which oxygen device delivers the HIGHEST concentration of oxygen?",options:["Nasal cannula","Simple face mask","Non-rebreather mask","Venturi mask"],answer:2,rat:"The non-rebreather mask (reservoir bag + one-way valves) delivers up to 90–95% FiO₂."},
+  {q:"What is the EARLIEST sign of hypoxia?",options:["Cyanosis","Restlessness","Bradycardia","Clubbing"],answer:1,rat:"Restlessness and anxiety are early signs. Cyanosis is a late, ominous sign."},
+  {q:"A nasal cannula is set at the correct range of:",options:["1–6 L/min","10–15 L/min","Up to 60 L/min","Flow does not matter"],answer:0,rat:"Nasal cannula runs 1–6 L/min (~24–44% FiO₂); higher dries mucosa."},
+  {q:"How long should the nurse apply suction during one pass?",options:["10–15 seconds","30 seconds","45 seconds","Until secretions clear completely"],answer:0,rat:"Limit suction to 10–15 seconds per pass to prevent hypoxia and trauma; hyperoxygenate before and between."},
+  {q:"Which position best eases breathing for a patient in respiratory distress?",options:["Supine","High-Fowler's / sitting upright","Trendelenburg","Prone"],answer:1,rat:"High-Fowler's lowers the diaphragm and maximizes lung expansion."},
+  {q:"Which device delivers the MOST precise FiO₂, useful in COPD?",options:["Nasal cannula","Venturi mask","Simple mask","Partial rebreather"],answer:1,rat:"The Venturi mask delivers a precise, fixed oxygen concentration."},
+  {q:"Crackles heard on auscultation most likely indicate:",options:["Bronchospasm","Fluid in the alveoli","Pleural inflammation","Upper-airway secretions"],answer:1,rat:"Crackles (rales) = fluid in small airways/alveoli; wheezes = bronchospasm; rhonchi = secretions; rub = pleuritis."},
+  {q:"Which interventions promote oxygenation? (Select all that apply.)",options:["High-Fowler's position","Coughing and deep breathing","Keeping the patient flat and still","Adequate hydration"],answer:[0,1,3],rat:"Upright positioning, coughing/deep breathing, and hydration help; lying flat reduces lung expansion."},
+  {q:"Before suctioning, the nurse should FIRST:",options:["Apply continuous suction for 30 sec","Hyperoxygenate the patient","Withhold all oxygen","Instill large amounts of saline"],answer:1,rat:"Hyperoxygenate before (and between) passes to prevent suction-induced hypoxia."},
+ ]},
+
+/* ---------------- CH 24 ---------------- */
+{num:"24",title:"Communication",
+ scenes:[
+  {phase:"Overview",lead:"Fast Overview",
+   art:title("Communication","Ch. 24 — therapeutic vs not")+nurse(230,360,1.4)+patient(560,340,.9)+box(470,140,440,46,"Therapeutic techniques","#4fd1c5",.3)+box(470,194,440,46,"What NOT to say","#ff7a6b",.6)+box(470,248,440,46,"Special populations","#f6c453",.9),
+   cap:"Chapter 24 overview: the <span class='hl'>therapeutic techniques</span> that open a patient up, the <span class='hc'>nontherapeutic phrases to avoid</span>, and how to adapt for <span class='ha'>special populations.</span>",
+   say:"Chapter 24, communication. Overview. This chapter is about three things. The therapeutic techniques that encourage a patient to share. The nontherapeutic responses that shut them down, which the exam loves as wrong answers. And how to adapt communication for special populations, like patients with hearing loss or language barriers. Communication questions are mostly 'pick the best response,' so we'll focus on what makes a response therapeutic."},
+  {phase:"Core Concepts",lead:"Therapeutic Communication",
+   art:title("SOLER &amp; Techniques")+nurse(240,360,1.3)+speech(330,250,"Tell me more...")+box(560,130,360,46,"Nonverbal = 55–93% of message","#4fd1c5",.3)+box(560,182,360,46,"SOLER: Sit, Open, Lean, Eye, Relax","#f6c453",.6)+box(560,234,360,46,"Open-ended · clarify · restate · silence","#ff7a6b",.9),
+   cap:"Most of a message — <span class='hl'>55 to 93%</span> — is nonverbal. Use <span class='ha'>SOLER</span> for active listening, and therapeutic techniques: <span class='hc'>open-ended questions, clarifying, restating, and silence.</span>",
+   say:"Core concepts. First, nonverbal communication carries the majority of the message, somewhere between fifty-five and ninety-three percent — body language, tone, and silence say more than words. For active listening, use the SOLER acronym: Sit squarely facing the patient, Open posture, Lean toward them, Eye contact, and Relax. The therapeutic techniques to recognize are open-ended questions, clarifying, restating, and the powerful use of silence to let the patient think and respond."},
+  {phase:"NCLEX Traps",lead:"Trap Warning",flag:"NCLEX TRAP",must:"MUST KNOW",
+   art:title("⚠️ Nontherapeutic = Wrong Answer")+nurse(240,365,1.3)+`<text x="560" y="155" font-family="Space Grotesk" font-size="16" fill="#ff7a6b" class="slidein">✗ 'Everything will be fine'</text><text x="560" y="200" font-family="Space Grotesk" font-size="16" fill="#ff7a6b" class="slidein" style="animation-delay:.4s">✗ 'Don't worry'</text><text x="560" y="245" font-family="Space Grotesk" font-size="16" fill="#ff7a6b" class="slidein" style="animation-delay:.8s">✗ Giving advice / 'why' questions</text><text x="560" y="290" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein" style="animation-delay:1.2s">✓ Reflect feelings + open-ended</text>`,
+   cap:"<span class='hc'>Trap:</span> false reassurance ('Everything will be fine,' 'Don't worry'), giving advice, and 'why' questions are <span class='hc'>always wrong</span>. The right answer <span class='hl'>reflects feelings and stays open-ended.</span>",
+   say:"NCLEX trap, must know. On a 'best response' question, certain answers are automatically wrong. Anything that's false reassurance, like 'everything will be fine' or 'don't worry,' is nontherapeutic. Giving advice or asking 'why' questions also shuts the patient down. The correct answer almost always reflects the patient's feelings back and uses an open-ended invitation, like 'tell me more about what's worrying you.' When in doubt, pick the response that explores the patient's feelings rather than fixing or reassuring."},
+  {checkpoint:{q:"A patient says, 'I'm scared about my surgery.' Which response is therapeutic?",options:["'Don't worry, your surgeon is the best.'","'Everyone feels that way.'","'Tell me more about what worries you.'","'You'll be fine — get some rest.'"],answer:2,fb:"Open-ended exploration of feelings is therapeutic. The others are false reassurance or minimizing."}},
+  {phase:"Priority Interventions",lead:"Special Populations",
+   art:title("Adapt the Approach")+box(80,140,400,46,"Language → INTERPRETER (not family)","#ff7a6b",.2)+box(80,192,400,46,"Hearing loss → face, reduce noise","#4fd1c5",.5)+box(80,244,400,46,"Visual → announce, describe","#f6c453",.8)+box(530,140,400,46,"Cognitive → simple, short, yes/no","#4fd1c5",.6)+box(530,192,400,46,"Conflict → 'I' statements, stay calm","#f6c453",.9)+box(530,244,400,46,"Empathy ≠ sympathy","#b07ad1",1.2),
+   cap:"Adapt: use a <span class='hc'>professional interpreter</span> (never family for medical info), <span class='hl'>face the hearing-impaired patient</span>, announce yourself to the visually impaired, use <span class='ha'>'I' statements</span> in conflict. Empathy ≠ sympathy.",
+   say:"Priority interventions for special populations. For a language barrier, use professional interpreter services — not a family member for medical information, for accuracy and privacy. For hearing impairment, face the patient directly and reduce background noise. For visual impairment, announce yourself when entering and describe the surroundings. For cognitive impairment, use simple language, short sentences, and yes-or-no questions. In conflict, address it early, use 'I' statements, and stay calm. And remember: empathy, understanding the patient's feelings, is not the same as sympathy, which is feeling sorry for them."},
+  {phase:"Memory Tricks",lead:"Memory Trick",
+   art:title("SOLER &amp; the Golden Rule")+`<text x="500" y="150" text-anchor="middle" font-family="Caveat" font-size="34" fill="#4fd1c5" class="fade">S-O-L-E-R</text><text x="500" y="195" text-anchor="middle" font-family="DM Mono" font-size="15" fill="#eaf2f0" class="fade" style="animation-delay:.4s">Sit · Open · Lean · Eye · Relax</text><text x="500" y="260" text-anchor="middle" font-family="Caveat" font-size="30" fill="#f6c453" class="fade" style="animation-delay:.9s">Best answer = explore FEELINGS</text><text x="500" y="320" text-anchor="middle" font-family="Caveat" font-size="26" fill="#ff7a6b" class="fade" style="animation-delay:1.4s">If it reassures or advises → it's wrong</text>`,
+   cap:"Memory trick: <span class='hl'>SOLER</span> = Sit, Open, Lean, Eye, Relax. And the golden rule for 'best response' questions: <span class='ha'>pick the answer that explores feelings</span> — if it reassures or advises, it's wrong.",
+   say:"Memory tricks. For active listening, SOLER: Sit, Open posture, Lean in, Eye contact, Relax. And here's the golden rule for communication questions: the best answer is the one that explores the patient's feelings. If an option reassures, minimizes, advises, or changes the subject, eliminate it. Explore feelings, don't fix them."},
+  {phase:"Rapid-Fire",lead:"Rapid-Fire Review",
+   art:title("⚡ Rapid Fire — Ch 24")+`<text x="60" y="135" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein">▸ Nonverbal = most of the message</text><text x="60" y="173" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:.3s">▸ SOLER = active listening</text><text x="60" y="211" font-family="Space Grotesk" font-size="16" fill="#ff7a6b" class="slidein" style="animation-delay:.6s">▸ Never: 'don't worry' / false reassurance</text><text x="60" y="249" font-family="Space Grotesk" font-size="16" fill="#b07ad1" class="slidein" style="animation-delay:.9s">▸ Best answer explores FEELINGS (open-ended)</text><text x="60" y="287" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein" style="animation-delay:1.2s">▸ Interpreter for language (not family)</text><text x="60" y="325" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:1.5s">▸ Empathy ≠ sympathy</text>`,
+   cap:"Rapid fire: nonverbal dominates · SOLER for listening · never use false reassurance · <span class='hl'>best answer explores feelings</span> · professional interpreter, not family · empathy ≠ sympathy.",
+   say:"Rapid fire, chapter 24. Nonverbal communication carries most of the message. SOLER guides active listening. Never use false reassurance like 'don't worry.' On best-response questions, choose the option that explores feelings with open-ended language. Use a professional interpreter for language barriers, not the family. And empathy is not the same as sympathy. That's communication."},
+ ],
+ quiz:[
+  {q:"A patient says, 'I'm scared I won't wake up from surgery.' The most therapeutic response is:",options:["'Don't worry, your surgeon is excellent.'","'It sounds like you're frightened. Tell me more.'","'Everyone feels that way.'","'You'll be fine — try to rest.'"],answer:1,rat:"Reflecting feelings and inviting elaboration is therapeutic; the others are false reassurance or minimizing."},
+  {q:"Which is a therapeutic communication technique?",options:["Offering false reassurance","Using silence","Changing the subject","Giving advice"],answer:1,rat:"Silence lets the patient process and respond; the others block communication."},
+  {q:"The 'L' in SOLER stands for:",options:["Listen quietly","Lean toward the patient","Limit eye contact","Lower your voice"],answer:1,rat:"SOLER: Sit squarely, Open posture, Lean toward patient, Eye contact, Relax."},
+  {q:"For a patient who speaks limited English, the nurse should:",options:["Use a family member to interpret medical info","Use a professional medical interpreter","Speak louder in English","Avoid detailed teaching"],answer:1,rat:"Professional interpreters ensure accuracy and privacy; family should not interpret medical information."},
+  {q:"Which response demonstrates empathy?",options:["'I know exactly how you feel.'","'It sounds like this has been really difficult for you.'","'Don't be upset.'","'At least it's not worse.'"],answer:1,rat:"Empathy acknowledges and reflects the patient's experience without minimizing or claiming identical feelings."},
+  {q:"When communicating with a hearing-impaired patient, the nurse should:",options:["Shout into the ear","Face the patient and reduce background noise","Cover the mouth while speaking","Speak only to the family"],answer:1,rat:"Facing the patient supports lip-reading and cues; reducing noise improves comprehension."},
+  {q:"Which is a NONtherapeutic response?",options:["Restating","Clarifying","'Why did you do that?'","Reflecting"],answer:2,rat:"'Why' questions sound accusatory and put patients on the defensive — nontherapeutic."},
+  {q:"During the working phase of the nurse–patient relationship, the nurse and patient:",options:["Plan termination","Set goals and carry out interventions","First establish trust","Review records before meeting"],answer:1,rat:"The working phase is where goals are met and interventions occur; orientation builds trust first."},
+  {q:"Which behaviors block communication? (Select all that apply.)",options:["False reassurance","Changing the subject","Active listening","Giving unsolicited advice"],answer:[0,1,3],rat:"False reassurance, changing the subject, and giving advice all block communication; active listening helps."},
+  {q:"A patient is angry and says, 'You nurses never listen!' The most therapeutic reply is:",options:["'That's not true, I check on you constantly.'","'You seem upset — tell me what's been happening.'","'You shouldn't talk to me that way.'","'Calm down right now.'"],answer:1,rat:"Acknowledging the emotion and inviting the patient to elaborate is therapeutic and de-escalating."},
+ ]},
+
+/* ---------------- CH 25 ---------------- */
+{num:"25",title:"Patient Education",
+ scenes:[
+  {phase:"Overview",lead:"Fast Overview",
+   art:title("Patient Education","Ch. 25 — teach so it sticks")+nurse(230,360,1.4)+box(470,140,440,46,"3 learning domains","#4fd1c5",.3)+box(470,194,440,46,"Readiness &amp; barriers","#ff7a6b",.6)+box(470,248,440,46,"Teach-back = gold standard ⭐","#f6c453",.9),
+   cap:"Chapter 25 overview: the <span class='hl'>three learning domains</span>, assessing <span class='hc'>readiness and barriers</span>, and the starred <span class='ha'>teach-back method</span> for confirming learning.",
+   say:"Chapter 25, patient education. Overview. Three areas. The three learning domains: cognitive, affective, and psychomotor. Readiness to learn and the barriers that block it. And the professor-emphasized teach-back method, which is the gold standard for confirming a patient actually understood. Teaching follows the nursing process: assess, plan, implement, and evaluate."},
+  {phase:"Core Concepts",lead:"Three Learning Domains",
+   art:title("Cognitive · Affective · Psychomotor")+nurse(230,360,1.2)+box(470,130,440,52,"COGNITIVE → knowledge (lists/explains)","#4fd1c5",.3)+box(470,194,440,52,"AFFECTIVE → attitudes, feelings, values","#f6c453",.6)+box(470,258,440,52,"PSYCHOMOTOR → skills (return demo)","#ff7a6b",.9),
+   cap:"<span class='hl'>Cognitive</span> = knowledge (listing, explaining). <span class='ha'>Affective</span> = attitudes, feelings, values. <span class='hc'>Psychomotor</span> = hands-on skills, confirmed by <span class='hc'>return demonstration.</span>",
+   say:"Core concepts, the three learning domains. Cognitive is knowledge — the patient can list, explain, or describe. Affective is attitudes, feelings, and values — for example, accepting a new diagnosis. Psychomotor is hands-on skill, like drawing up insulin, and you confirm it with a return demonstration where the patient physically shows you. Match the teaching method to the domain: lecture and discussion for cognitive, demonstration and return demonstration for psychomotor."},
+  {phase:"NCLEX Traps",lead:"Trap Warning",flag:"NCLEX TRAP",
+   art:title("⚠️ Readiness Trap")+nurse(250,360,1.3)+speech(330,250,"ow, my pain...")+box(560,150,360,52,"Pain/anxiety → ↓ readiness","#ff7a6b",.4)+box(560,216,360,52,"Fix barriers BEFORE teaching","#4fd1c5",.8)+box(560,282,360,52,"Don't teach during acute pain","#f6c453",1.2),
+   cap:"<span class='hc'>Trap:</span> a patient in <span class='hc'>pain or high anxiety cannot learn</span>. If a question has you teaching someone who's hurting, the right move is to <span class='hl'>relieve the barrier first</span>, then teach.",
+   say:"NCLEX trap. The exam will set up a teaching scenario where the patient is in pain, anxious, or acutely ill, and then ask what you do. The trap is to start teaching anyway. Don't. Pain and anxiety lower readiness to learn — the patient can't focus or retain information. The correct action is to address the barrier first: relieve the pain, reduce the anxiety, and then teach once the patient is comfortable and ready."},
+  {checkpoint:{q:"A patient is scheduled for discharge teaching but reports pain of 8/10. What should the nurse do FIRST?",options:["Teach quickly before pain worsens","Treat the pain, then teach when comfortable","Skip teaching entirely","Teach the family instead"],answer:1,fb:"Pain lowers readiness to learn — manage it first, then teach effectively."}},
+  {phase:"Priority Interventions",lead:"Teach-Back & SMART",flag:"PROFESSOR FOCUS",
+   art:title("Confirm Learning")+nurse(240,360,1.3)+speech(330,250,"show me how...")+box(560,140,360,52,"Teach-back: 'show me how...'","#4fd1c5",.4)+box(560,206,360,52,"NOT 'do you understand?'","#ff7a6b",.7)+box(560,272,360,52,"6th-grade language + pictures","#f6c453",1.0),
+   cap:"<span class='hl'>Teach-back is the gold standard:</span> ask the patient to <span class='ha'>'show me how you would…'</span> — <span class='hc'>never just 'do you understand?'</span> Use plain, 6th-grade language and pictures.",
+   say:"Priority interventions, professor focus. Teach-back is the gold standard for evaluating learning. Instead of asking 'do you understand?' — which only gets a yes — ask the patient to show you or explain it back in their own words: 'show me how you would give yourself this injection.' That proves they learned it. For health literacy, use plain language at about a sixth-grade level, with pictures and models. And write SMART objectives: specific, measurable, achievable, relevant, and time-bound."},
+  {phase:"Memory Tricks",lead:"Memory Trick",
+   art:title("Match Domain to Method")+`<text x="500" y="160" text-anchor="middle" font-family="Caveat" font-size="30" fill="#4fd1c5" class="fade">Cognitive = think → explain/list</text><text x="500" y="215" text-anchor="middle" font-family="Caveat" font-size="30" fill="#f6c453" class="fade" style="animation-delay:.5s">Affective = Attitude/feelings</text><text x="500" y="270" text-anchor="middle" font-family="Caveat" font-size="30" fill="#ff7a6b" class="fade" style="animation-delay:1.0s">Psychomotor = Physical → return demo</text>`,
+   cap:"Memory trick: <span class='hl'>Cognitive</span> = think (explain/list), <span class='ha'>Affective</span> = Attitude/feelings, <span class='hc'>Psychomotor</span> = Physical skill → return demo confirms it.",
+   say:"Memory trick for the domains. Cognitive starts with a hard C — think, the patient explains or lists facts. Affective starts with A, like Attitude — feelings and values. Psychomotor starts with P, like Physical — a hands-on skill confirmed by return demonstration. Cognitive think, Affective attitude, Psychomotor physical."},
+  {phase:"Rapid-Fire",lead:"Rapid-Fire Review",
+   art:title("⚡ Rapid Fire — Ch 25")+`<text x="60" y="140" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein">▸ Domains: cognitive, affective, psychomotor</text><text x="60" y="180" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:.3s">▸ Teach-back = gold standard ('show me')</text><text x="60" y="220" font-family="Space Grotesk" font-size="16" fill="#ff7a6b" class="slidein" style="animation-delay:.6s">▸ Pain/anxiety ↓ readiness — fix first</text><text x="60" y="260" font-family="Space Grotesk" font-size="16" fill="#b07ad1" class="slidein" style="animation-delay:.9s">▸ Return demo = best for psychomotor</text><text x="60" y="300" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein" style="animation-delay:1.2s">▸ 6th-grade language, SMART objectives</text><text x="60" y="340" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:1.5s">▸ Begin teaching on admission</text>`,
+   cap:"Rapid fire: domains cognitive/affective/psychomotor · <span class='hl'>teach-back gold standard</span> · fix pain/anxiety first · return demo for skills · 6th-grade + SMART · teach early.",
+   say:"Rapid fire, chapter 25. The learning domains are cognitive, affective, and psychomotor. Teach-back is the gold standard — ask the patient to show you. Pain and anxiety lower readiness, so fix barriers first. Return demonstration is best for psychomotor skills. Use sixth-grade language and SMART objectives. And begin discharge teaching on admission, not the day they leave. That's patient education."},
+ ],
+ quiz:[
+  {q:"A nurse teaches a patient to self-inject insulin. Which domain is primarily involved?",options:["Cognitive","Affective","Psychomotor","Spiritual"],answer:2,rat:"Psychomotor = physical skills; confirm with return demonstration."},
+  {q:"Which method BEST confirms a patient understood teaching?",options:["Ask 'Do you understand?'","Use teach-back","Give a pamphlet","Document teaching done"],answer:1,rat:"Teach-back (patient explains/shows in own words) is the gold standard for confirming understanding."},
+  {q:"A patient in severe pain is scheduled for teaching. The nurse should:",options:["Teach quickly","Manage the pain first, then teach","Skip teaching","Teach the family only"],answer:1,rat:"Pain lowers readiness to learn; relieve it before teaching for retention."},
+  {q:"Accepting a new diagnosis and changing one's attitude reflects which domain?",options:["Cognitive","Affective","Psychomotor","Kinesthetic"],answer:1,rat:"Affective domain involves feelings, values, and attitudes."},
+  {q:"What should the nurse assess BEFORE choosing teaching materials?",options:["Insurance status","Health literacy","Favorite TV shows","Family presence"],answer:1,rat:"Match materials to the patient's health literacy/reading level for effective teaching."},
+  {q:"The BEST way to evaluate psychomotor learning is:",options:["Written test","Verbal questioning","Return demonstration","Reviewing a handout"],answer:2,rat:"Return demonstration lets the nurse verify the skill is performed correctly."},
+  {q:"When is the best time to begin discharge teaching?",options:["Morning of discharge","On admission","Only when the patient asks","Last hour of stay"],answer:1,rat:"Beginning on admission allows time to reinforce and evaluate learning."},
+  {q:"A SMART learning objective is:",options:["Vague and flexible","Specific, Measurable, Achievable, Relevant, Time-bound","Focused on what the nurse teaches","About pathophysiology"],answer:1,rat:"SMART objectives describe specific, measurable learner outcomes within a timeframe."},
+  {q:"Which strategies help when teaching older adults? (Select all that apply.)",options:["Allow extra time","Build on prior experience","Use rapid delivery","Provide large-print materials"],answer:[0,1,3],rat:"Allow time, connect to experience, and use accessible materials; rushing impairs retention."},
+  {q:"A patient says 'yes' when asked if they understand, but cannot perform the skill. This shows:",options:["Teaching was effective","Verbal 'yes' doesn't prove learning — use return demonstration","No further teaching needed","The patient is non-compliant"],answer:1,rat:"Evaluate by observed behavior/return demonstration, not a verbal yes."},
+ ]},
+
+/* ---------------- CH 26 ---------------- */
+{num:"26",title:"Informatics & Documentation",
+ scenes:[
+  {phase:"Overview",lead:"Fast Overview",
+   art:title("Informatics &amp; Documentation","Ch. 26 — if it isn't charted...")+nurse(230,360,1.3)+box(470,140,440,46,"Charting = legal document","#ff7a6b",.3)+box(470,194,440,46,"SBAR for hand-off","#4fd1c5",.6)+box(470,248,440,46,"EHR &amp; HIPAA privacy","#f6c453",.9),
+   cap:"Chapter 26 overview: the medical record is a <span class='hc'>legal document</span>, <span class='hl'>SBAR</span> standardizes hand-off, and the <span class='ha'>EHR plus HIPAA</span> govern access and privacy.",
+   say:"Chapter 26, informatics and documentation. Overview. The big theme: the medical record is a legal document, so accuracy and proper technique are non-negotiable. We'll cover the rules of good documentation, the SBAR format for reporting and hand-off, and the electronic health record along with HIPAA privacy rules. If it isn't charted, it wasn't done."},
+  {phase:"Core Concepts",lead:"Documentation Rules",must:"MUST KNOW",
+   art:title("Charting Rules")+nurse(230,360,1.2)+box(470,120,440,48,"Objective vs subjective — no opinions","#4fd1c5",.3)+box(470,176,440,48,"Chart ASAP after care (timely)","#f6c453",.6)+box(470,232,440,48,"No blank spaces — line through","#ff7a6b",.9)+box(470,288,440,48,"Error: single line + initials + date","#b07ad1",1.2),
+   cap:"Rules: chart <span class='hl'>objective vs subjective</span> (no interpretation), document <span class='ha'>promptly</span>, leave <span class='hc'>no blank spaces</span>, and fix an error with a <span class='hv'>single line, initials, and date — never white-out.</span>",
+   say:"Core concepts, must-know documentation rules. Document objective data, what you observed and measured, separately from subjective data, what the patient reported — and avoid your own interpretation. Chart as soon as possible after care, never before. Don't leave blank spaces; draw a line through any empty field so nothing can be added later. And to correct an error, draw a single line through it so it stays readable, then add your initials and the date, and write the correct entry. Never use white-out and never erase or delete."},
+  {phase:"NCLEX Traps",lead:"Trap Warning",flag:"NCLEX TRAP",
+   art:title("⚠️ Error-Correction Trap")+`<text x="500" y="160" font-family="Space Grotesk" text-anchor="middle" font-size="17" fill="#ff7a6b" class="slidein">✗ White-out · ✗ Erase · ✗ Delete · ✗ Scribble out</text><text x="500" y="220" font-family="Space Grotesk" text-anchor="middle" font-size="18" fill="#4fd1c5" class="slidein" style="animation-delay:.5s">✓ Single line + initials + date + correct entry</text><text x="500" y="290" font-family="Caveat" text-anchor="middle" font-size="26" fill="#f6c453" class="fade" style="animation-delay:1.0s">Original must stay READABLE</text>`,
+   cap:"<span class='hc'>Trap:</span> white-out, erasing, deleting, or scribbling out are all <span class='hc'>wrong</span>. Correct an error with a <span class='hl'>single line, your initials, the date</span>, then the correct entry — the original must stay readable.",
+   say:"NCLEX trap. When you make a charting error, the exam offers tempting wrong answers: use white-out, erase it, delete the entry, or scribble it out completely. All wrong. The only correct method is to draw a single line through the error so it remains readable, add your initials and the date, and then write the correct information. The original entry must stay legible for legal reasons. Obscuring it looks like you're hiding something."},
+  {checkpoint:{q:"A nurse makes a documentation error in a paper chart. The correct correction is to:",options:["Use white-out and rewrite","Draw a single line through it, initial and date, then correct","Erase it completely","Scribble it out fully"],answer:1,fb:"A single line keeps the original readable; add initials and date. Never obscure the entry."}},
+  {phase:"Priority Interventions",lead:"SBAR & HIPAA",flag:"PROFESSOR FOCUS",
+   art:title("SBAR &amp; Privacy")+box(120,130,400,46,"S — Situation","#4fd1c5",.2)+box(120,182,400,46,"B — Background","#f6c453",.5)+box(120,234,400,46,"A — Assessment","#ff7a6b",.8)+box(120,286,400,46,"R — Recommendation","#b07ad1",1.1)+box(560,182,380,46,"HIPAA: minimum necessary","#4fd1c5",.9)+box(560,234,380,46,"Sharing login = violation","#ff6b5e",1.2),
+   cap:"<span class='hl'>SBAR</span> = Situation, Background, Assessment, Recommendation. Under <span class='ha'>HIPAA</span>, share the <span class='hl'>minimum necessary</span> and log off in public — <span class='hc'>sharing your login is a serious violation.</span>",
+   say:"Priority interventions, professor focus. SBAR structures any hand-off or report: Situation — what's happening now; Background — relevant history; Assessment — what you think is going on; Recommendation — what you want done. For verbal orders, read them back and they must be countersigned within twenty-four hours. Under HIPAA, disclose only the minimum necessary information, always log off the computer in public areas, and never share your login credentials — that's a serious HIPAA violation. Report any breach immediately."},
+  {phase:"Memory Tricks",lead:"Memory Trick",
+   art:title("SBAR &amp; Error Fix")+`<text x="500" y="160" text-anchor="middle" font-family="Caveat" font-size="34" fill="#4fd1c5" class="fade">S-B-A-R</text><text x="500" y="205" text-anchor="middle" font-family="DM Mono" font-size="15" fill="#eaf2f0" class="fade" style="animation-delay:.4s">Situation · Background · Assessment · Recommendation</text><text x="500" y="270" text-anchor="middle" font-family="Caveat" font-size="28" fill="#f6c453" class="fade" style="animation-delay:.9s">Error? One line, initial, date — keep it readable</text>`,
+   cap:"Memory trick: <span class='hl'>SBAR</span> — Situation, Background, Assessment, Recommendation. For errors: <span class='ha'>one line, initial, date</span> — and keep the original readable.",
+   say:"Memory tricks. SBAR for hand-off: Situation, Background, Assessment, Recommendation — say it in that order every time. And for a charting error, three steps: one line through it, your initials, and the date — while keeping the original readable. One line, initial, date."},
+  {phase:"Rapid-Fire",lead:"Rapid-Fire Review",
+   art:title("⚡ Rapid Fire — Ch 26")+`<text x="60" y="135" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein">▸ Chart = legal document; be objective</text><text x="60" y="173" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:.3s">▸ Chart ASAP, never before care</text><text x="60" y="211" font-family="Space Grotesk" font-size="16" fill="#ff7a6b" class="slidein" style="animation-delay:.6s">▸ Error: single line + initials + date</text><text x="60" y="249" font-family="Space Grotesk" font-size="16" fill="#b07ad1" class="slidein" style="animation-delay:.9s">▸ SBAR for hand-off &amp; reporting</text><text x="60" y="287" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein" style="animation-delay:1.2s">▸ HIPAA: minimum necessary; never share login</text><text x="60" y="325" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:1.5s">▸ Verbal order: read back + countersign 24h</text>`,
+   cap:"Rapid fire: chart = legal, stay objective · chart ASAP not before · <span class='hl'>error = single line + initials + date</span> · SBAR hand-off · HIPAA minimum necessary, never share login · verbal order read-back.",
+   say:"Rapid fire, chapter 26. The chart is a legal document; document objectively. Chart as soon as possible after care, never before. Correct an error with a single line, initials, and date. Use SBAR for hand-off and reporting. Under HIPAA, share only the minimum necessary and never share your login. Verbal orders get read back and countersigned within twenty-four hours. That's documentation."},
+ ],
+ quiz:[
+  {q:"A nurse makes an error charting in a paper record. The correct action is to:",options:["Use white-out and rewrite","Draw a single line through it, add initials and date, then correct","Delete the entry","Black it out with marker"],answer:1,rat:"A single line keeps the original readable; add initials/date. White-out and deletion raise legal concerns."},
+  {q:"Which is an example of objective, factual documentation?",options:["'Patient appears anxious'","'Patient is uncooperative'","'Respirations 22/min, even and unlabored'","'Patient seems in pain'"],answer:2,rat:"Objective data are measurable observations; the others are interpretations."},
+  {q:"During a hand-off using SBAR, the 'R' stands for:",options:["Report","Recommendation","Response","Rationale"],answer:1,rat:"SBAR: Situation, Background, Assessment, Recommendation."},
+  {q:"Which action is a serious HIPAA violation?",options:["Logging off after charting","Sharing your login with a coworker","Accessing only your patients' records","Using minimum necessary information"],answer:1,rat:"Sharing login credentials breaches access controls and patient privacy."},
+  {q:"When should the nurse document care?",options:["At end of shift only","Promptly after the care is provided","Before the care is provided","Only if a problem occurs"],answer:1,rat:"Chart promptly after care to keep the record current and accurate; never chart in advance."},
+  {q:"A telephone order is received. The nurse should:",options:["Carry it out, then call back","Read the order back to verify","Have another nurse interpret it","Document after the shift"],answer:1,rat:"Read-back of verbal/telephone orders prevents transcription and communication errors."},
+  {q:"Which is an advantage of the electronic health record (EHR)?",options:["Accessible at only one facility","Legibility, real-time access, and decision support","Eliminates confidentiality needs","Always handwritten"],answer:1,rat:"The EHR adds legibility, real-time access, alerts, and clinical decision support."},
+  {q:"After completing an incident report for a patient fall, the nurse should:",options:["Note in the chart that a report was filed","Document the objective facts of the fall without referencing the report","Place a copy in the chart","Avoid documenting the fall"],answer:1,rat:"Chart objective facts/assessment in the record; do not reference or file the incident report in the chart."},
+  {q:"Which are correct legal documentation practices? (Select all that apply.)",options:["Record legibly in ink","Chart objective, factual data","Sign each entry","Document care before performing it"],answer:[0,1,2],rat:"Legible, factual, signed entries are required; never chart before care is given."},
+  {q:"A verbal order must be countersigned within:",options:["24 hours","1 week","30 days","It never needs countersigning"],answer:0,rat:"Verbal/telephone orders are read back and countersigned (typically within 24 hours per policy)."},
+ ]},
+
+/* ---------------- CH 30 ---------------- */
+{num:"30",title:"Health Assessment",
+ scenes:[
+  {phase:"Overview",lead:"Fast Overview",
+   art:title("Health Assessment","Ch. 30 — look, feel, tap, listen")+nurse(230,360,1.3)+box(470,140,440,46,"4 techniques: IPPA","#4fd1c5",.3)+box(470,194,440,46,"Abdomen = special order ⭐","#ff7a6b",.6)+box(470,248,440,46,"Head-to-toe + Glasgow Coma","#f6c453",.9),
+   cap:"Chapter 30 overview: the four techniques <span class='hl'>(IPPA)</span>, the <span class='hc'>special abdominal order</span>, and head-to-toe highlights including the <span class='ha'>Glasgow Coma Scale.</span>",
+   say:"Chapter 30, health assessment and physical examination. Overview. Three things. The four assessment techniques in order, inspection, palpation, percussion, auscultation — remember IPPA. The one big exception, the abdomen, which changes the order, and that's professor-flagged. And head-to-toe highlights, including the Glasgow Coma Scale. Let's go."},
+  {phase:"Core Concepts",lead:"The 4 Techniques",
+   art:title("IPPA — In Order")+nurse(230,360,1.2)+box(470,130,440,48,"Inspection → look","#4fd1c5",.3)+box(470,186,440,48,"Palpation → light 1cm, deep 4–5cm","#f6c453",.6)+box(470,242,440,48,"Percussion → tap for tones","#ff7a6b",.9)+box(470,298,440,48,"Auscultation → listen","#b07ad1",1.2),
+   cap:"<span class='hl'>Inspection</span> (look) → <span class='ha'>Palpation</span> (light 1 cm, deep 4–5 cm) → <span class='hc'>Percussion</span> (tap for tones) → <span class='hv'>Auscultation</span> (listen). That's IPPA.",
+   say:"Core concepts, the four techniques in their standard order: IPPA. Inspection — you look, using sight, smell, and hearing. Palpation — you feel; light palpation is about one centimeter deep, deep palpation four to five centimeters. Percussion — you tap the body surface to produce tones; resonance over lung, dullness over the liver, tympany over the stomach. Auscultation — you listen with a stethoscope. Inspection, palpation, percussion, auscultation."},
+  {phase:"NCLEX Traps",lead:"Trap Warning",flag:"PROFESSOR FOCUS",must:"MUST KNOW",
+   art:title("⚠️ The Abdomen Exception")+box(140,150,720,56,"Inspect → AUSCULTATE → Percuss → Palpate","#4fd1c5",.3)+`<text x="500" y="270" text-anchor="middle" font-family="Caveat" font-size="30" fill="#f6c453" class="fade" style="animation-delay:.7s">Listen BEFORE you touch</text><text x="500" y="320" text-anchor="middle" font-family="Space Grotesk" font-size="15" fill="#eaf2f0" class="fade" style="animation-delay:1.1s">Palpation would alter bowel sounds</text><text x="500" y="375" text-anchor="middle" font-family="Space Grotesk" font-size="14" fill="#8aa0a8" class="fade" style="animation-delay:1.4s">Normal bowel sounds: 5–30/min, all 4 quadrants</text>`,
+   cap:"<span class='hc'>Trap (professor focus):</span> the abdomen flips the order — Inspect → <span class='hl'>Auscultate</span> → Percuss → Palpate. You <span class='ha'>listen before touching</span>, because palpation alters bowel sounds. Normal = 5–30/min.",
+   say:"This is the must-know trap, and it's professor-flagged. For every body system the order is inspect, palpate, percuss, auscultate — except the abdomen. For the abdomen, you inspect, then auscultate, then percuss, then palpate. You listen before you touch, because pressing or tapping on the abdomen would artificially stimulate the bowel and change the bowel sounds you're trying to assess. Normal bowel sounds are five to thirty per minute in all four quadrants. If a question asks the order of abdominal assessment, auscultation comes second."},
+  {checkpoint:{q:"In which order does the nurse assess the abdomen?",options:["Inspect → Palpate → Auscultate → Percuss","Inspect → Auscultate → Percuss → Palpate","Auscultate → Inspect → Palpate → Percuss","Palpate → Percuss → Auscultate → Inspect"],answer:1,fb:"Abdomen: Inspect → Auscultate → Percuss → Palpate. Listen before touching so bowel sounds aren't altered."}},
+  {phase:"Priority Interventions",lead:"Head-to-Toe Highlights",
+   art:title("Key Findings")+nurse(210,360,1.2)+box(440,118,480,46,"Neuro: GCS, PERRLA, cranial nerves","#4fd1c5",.3)+box(440,170,480,46,"Heart: S1 mitral/tricuspid, S2 aortic/pulmonic","#f6c453",.6)+box(440,222,480,46,"Apical pulse: full 1 minute","#ff7a6b",.9)+box(440,274,480,46,"Skin turgor tent >3 sec = dehydration","#b07ad1",1.2)+box(440,326,480,46,"Muscle strength graded 0–5","#4fd1c5",1.5),
+   cap:"Neuro = <span class='hl'>GCS + PERRLA</span> + cranial nerves. Heart: <span class='ha'>S1</span> closes mitral/tricuspid, <span class='ha'>S2</span> aortic/pulmonic; apical pulse a <span class='hl'>full minute</span>. Tenting >3 sec = dehydration. Strength 0–5.",
+   say:"Priority head-to-toe highlights. Neurological: level of consciousness with the Glasgow Coma Scale, pupils with PERRLA — pupils equal, round, reactive to light and accommodation — and cranial nerve testing. Cardiovascular: S1 is the closing of the mitral and tricuspid valves, S2 the aortic and pulmonic; count the apical pulse for a full minute. Skin: turgor that tents for more than three seconds suggests dehydration, especially in older adults. Musculoskeletal: grade muscle strength on a zero to five scale."},
+  {phase:"Memory Tricks",lead:"Memory Trick",
+   art:title("I Am Pretty Pleased / Order")+`<text x="500" y="150" text-anchor="middle" font-family="Caveat" font-size="30" fill="#4fd1c5" class="fade">Most systems: I-P-P-A</text><text x="500" y="200" text-anchor="middle" font-family="DM Mono" font-size="14" fill="#eaf2f0" class="fade" style="animation-delay:.4s">Inspect · Palpate · Percuss · Auscultate</text><text x="500" y="265" text-anchor="middle" font-family="Caveat" font-size="30" fill="#ff7a6b" class="fade" style="animation-delay:.9s">Abdomen: I-A-P-P</text><text x="500" y="312" text-anchor="middle" font-family="DM Mono" font-size="14" fill="#eaf2f0" class="fade" style="animation-delay:1.2s">Inspect · Auscultate · Percuss · Palpate</text>`,
+   cap:"Memory trick: most systems = <span class='hl'>IPPA</span> (Inspect, Palpate, Percuss, Auscultate). Abdomen = <span class='hc'>IAPP</span> (Inspect, Auscultate, Percuss, Palpate) — auscultate moves up to second.",
+   say:"Memory trick for the order. Most systems follow IPPA: inspect, palpate, percuss, auscultate. For the abdomen, just move auscultation up to second, giving you I-A-P-P: inspect, auscultate, percuss, palpate. So whenever you see 'abdomen,' slide listening to right after looking. IPPA normally, IAPP for the abdomen."},
+  {phase:"Rapid-Fire",lead:"Rapid-Fire Review",
+   art:title("⚡ Rapid Fire — Ch 30")+`<text x="60" y="135" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein">▸ Most systems: Inspect→Palpate→Percuss→Auscultate</text><text x="60" y="173" font-family="Space Grotesk" font-size="16" fill="#ff7a6b" class="slidein" style="animation-delay:.3s">▸ ABDOMEN: Inspect→Auscultate→Percuss→Palpate</text><text x="60" y="211" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:.6s">▸ Bowel sounds 5–30/min, all 4 quadrants</text><text x="60" y="249" font-family="Space Grotesk" font-size="16" fill="#b07ad1" class="slidein" style="animation-delay:.9s">▸ GCS: eyes 1–4, verbal 1–5, motor 1–6 (max 15)</text><text x="60" y="287" font-family="Space Grotesk" font-size="16" fill="#4fd1c5" class="slidein" style="animation-delay:1.2s">▸ GCS ≤8 = severe TBI · apical pulse 1 full min</text><text x="60" y="325" font-family="Space Grotesk" font-size="16" fill="#f6c453" class="slidein" style="animation-delay:1.5s">▸ Skin tent >3 sec = dehydration</text>`,
+   cap:"Rapid fire: most systems IPPA · <span class='hc'>abdomen = inspect, auscultate, percuss, palpate</span> · bowel sounds 5–30/min · GCS max 15, ≤8 severe · apical pulse full minute · tenting >3 sec = dehydration.",
+   say:"Rapid fire, chapter 30. Most systems: inspect, palpate, percuss, auscultate. The abdomen exception: inspect, auscultate, percuss, palpate. Normal bowel sounds five to thirty per minute in all four quadrants. Glasgow Coma Scale: eyes one to four, verbal one to five, motor one to six, maximum fifteen; eight or below is severe brain injury. Count the apical pulse for a full minute. Skin tenting longer than three seconds suggests dehydration. And that completes Exam 3 — great work."},
+ ],
+ quiz:[
+  {q:"In which order does the nurse assess a patient's abdomen?",options:["Inspect → Palpate → Auscultate → Percuss","Inspect → Auscultate → Percuss → Palpate","Auscultate → Inspect → Percuss → Palpate","Palpate → Percuss → Inspect → Auscultate"],answer:1,rat:"Abdomen is the exception: auscultate before percussion/palpation so bowel sounds aren't altered."},
+  {q:"The nurse taps the patient's skin to vibrate underlying tissue. This technique is:",options:["Palpation","Inspection","Percussion","Auscultation"],answer:2,rat:"Percussion = tapping the body surface to produce vibration/sound reflecting tissue density."},
+  {q:"To assess the integrity of the optic nerve (CN II), the nurse uses a:",options:["Weber test","Snellen chart","Rinne test","Glasgow Coma Scale"],answer:1,rat:"The Snellen chart tests visual acuity (optic nerve). Weber/Rinne test hearing; GCS tests consciousness."},
+  {q:"On the Glasgow Coma Scale, abnormal extension (decerebrate) as best motor response scores:",options:["2","3","4","5"],answer:0,rat:"Abnormal extension = 2; abnormal flexion = 3; flexion withdrawal = 4; localizes pain = 5."},
+  {q:"Which cranial nerve has ONLY a sensory function?",options:["Olfactory (I)","Trigeminal (V)","Oculomotor (III)","Glossopharyngeal (IX)"],answer:0,rat:"Olfactory (I) is purely sensory; sensory-only nerves are I, II, and VIII."},
+  {q:"Which part of the hand best assesses skin temperature?",options:["Finger pads","Palmar surface","Dorsum (back) of the hand","Fingertips"],answer:2,rat:"The dorsum of the hand is most sensitive to temperature."},
+  {q:"Normal bowel sounds occur at a rate of:",options:["1–4/min","5–30/min","40–60/min","None are normal"],answer:1,rat:"Normal bowel sounds are 5–30 per minute, heard in all four quadrants."},
+  {q:"A skin-turgor 'tent' lasting longer than 3 seconds suggests:",options:["Overhydration","Dehydration","Normal aging only","Infection"],answer:1,rat:"Slow return of tented skin (>3 sec) suggests dehydration, especially in older adults."},
+  {q:"Which senses are used during inspection? (Select all that apply.)",options:["Sight","Smell","Hearing","Taste"],answer:[0,1,2],rat:"Inspection uses sight, smell, and hearing; taste is never used in physical assessment."},
+  {q:"A Glasgow Coma Scale score of 8 or below indicates:",options:["Normal consciousness","Mild confusion","Severe brain injury (coma)","Full alertness"],answer:2,rat:"GCS ≤8 indicates severe traumatic brain injury / coma."},
+ ]},
+];
+
+/* ===================== ENGINE ===================== */
+const stage=document.getElementById('stage'),menu=document.getElementById('menu'),nowTitle=document.getElementById('nowTitle'),phaseTag=document.getElementById('phaseTag'),sceneCount=document.getElementById('sceneCount'),bar=document.getElementById('bar'),dots=document.getElementById('dots'),playBtn=document.getElementById('playBtn'),ttsToggle=document.getElementById('ttsToggle'),rateSel=document.getElementById('rate'),allBar=document.getElementById('allBar'),allPct=document.getElementById('allPct'),toQuiz=document.getElementById('toQuiz'),quizsec=document.getElementById('quizsec'),quizBody=document.getElementById('quizBody'),quizTitle=document.getElementById('quizTitle'),quizScore=document.getElementById('quizScore'),quizChNum=document.getElementById('quizChNum');
+let ci=0,si=0,playing=false,advanceTimer=null,atCheckpoint=false;
+const completed=new Set();
+
+function buildMenu(){CH.forEach((c,i)=>{const b=document.createElement('button');b.innerHTML=`<span class="chk">✔</span><span class="cn">CH ${c.num}</span><span class="ct">${c.title}</span>`;b.onclick=()=>selectChapter(i);menu.appendChild(b);});}
+function markDone(i){completed.add(i);[...menu.children][i].classList.add('done');const pct=Math.round(completed.size/CH.length*100);allBar.style.width=pct+'%';allPct.textContent=pct+'%';}
+function selectChapter(i){stopSpeak();ci=i;si=0;atCheckpoint=false;quizsec.classList.remove('show');toQuiz.style.display='none';[...menu.children].forEach((b,k)=>b.classList.toggle('active',k===i));buildDots();renderScene();}
+function buildDots(){dots.innerHTML='';CH[ci].scenes.forEach((s,k)=>{const d=document.createElement('i');if(s.checkpoint)d.classList.add('qmark');d.className+=(k===si?' on':'');d.onclick=()=>{stopSpeak();si=k;atCheckpoint=false;renderScene();};dots.appendChild(d);});}
+function isCheckpoint(s){return !!s.checkpoint;}
+
+function renderScene(){
+  const c=CH[ci],s=c.scenes[si];
+  nowTitle.textContent=`Ch ${c.num} · ${c.title}`;
+  sceneCount.textContent=`${si+1} / ${c.scenes.length}`;
+  [...dots.children].forEach((d,k)=>d.classList.toggle('on',k===si));
+  bar.style.width=(si/(c.scenes.length-1))*100+'%';
+  if(isCheckpoint(s)){ renderCheckpoint(s); return; }
+  phaseTag.textContent=s.phase||'';
+  const flag=s.flag?`<div class="flag">⭐ ${s.flag}</div>`:'';
+  const must=s.must?`<div class="mustknow">⚠️ ${s.must}</div>`:'';
+  stage.innerHTML=`<svg viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid meet">${s.art}</svg>${flag}${must}<div class="caption"><span class="lead">${s.lead}</span>${s.cap}</div>`;
+}
+function renderCheckpoint(s){
+  phaseTag.textContent='Checkpoint';
+  const cp=s.checkpoint;
+  let opts=cp.options.map((o,i)=>`<button class="copt" data-i="${i}">${String.fromCharCode(65+i)}. ${o}</button>`).join('');
+  stage.innerHTML=`<div class="checkpoint"><div class="qlabel">✓ QUICK CHECK</div><div class="qtext">${cp.q}</div>${opts}<div class="cfb" id="cfb"></div><button class="cont" id="cont">Continue ▶</button></div>`;
+  const cont=document.getElementById('cont'),cfb=document.getElementById('cfb');
+  stage.querySelectorAll('.copt').forEach(b=>{b.onclick=()=>{
+    const i=+b.dataset.i;const correct=i===cp.answer;
+    stage.querySelectorAll('.copt').forEach(x=>x.style.pointerEvents='none');
+    b.classList.add(correct?'right':'wrong');
+    if(!correct)stage.querySelectorAll('.copt')[cp.answer].classList.add('right');
+    cfb.textContent=(correct?'✓ Correct. ':'✗ ')+cp.fb;
+    cont.classList.add('on');
+    if(playing && ttsToggle.checked) speakSeq([(correct?'Correct. ':'Not quite. ')+cp.fb], ()=>{});
+  };});
+  cont.onclick=()=>{ if(si<CH[ci].scenes.length-1){si++;renderScene(); if(playing) playScene();} };
+  // checkpoint pauses autoplay until answered
+}
+
+/* ---- speech: sentence-chunked, waits for end (no cutoff) ---- */
+let speakingChain=false;
+function splitSentences(t){return t.match(/[^.!?]+[.!?]+|\S+$/g)||[t];}
+function stopSpeak(){speakingChain=false;clearTimeout(advanceTimer);if('speechSynthesis'in window)speechSynthesis.cancel();}
+function speakSeq(chunks,done){
+  if(!('speechSynthesis'in window)||!ttsToggle.checked){done&&done();return;}
+  speechSynthesis.cancel();speakingChain=true;let idx=0;const rate=parseFloat(rateSel.value);
+  function next(){
+    if(!speakingChain){return;}
+    if(idx>=chunks.length){done&&done();return;}
+    const u=new SpeechSynthesisUtterance(chunks[idx]);u.rate=rate;u.pitch=1.0;
+    u.onend=()=>{ if(speakingChain){idx++; next();} };
+    u.onerror=()=>{ if(speakingChain){idx++; next();} };
+    speechSynthesis.speak(u);
+  }
+  next();
+}
+function playScene(){
+  const s=CH[ci].scenes[si];
+  if(isCheckpoint(s)){ return; } // wait for user to answer + continue
+  if(ttsToggle.checked && 'speechSynthesis' in window){
+    speakSeq(splitSentences(s.say), ()=>{ if(playing) afterScene(); });
+  } else {
+    const words=s.say.split(/\s+/).length; const ms=Math.max(5000, words/2.6*1000);
+    advanceTimer=setTimeout(()=>{ if(playing) afterScene(); }, ms);
+  }
+}
+function afterScene(){
+  if(si<CH[ci].scenes.length-1){ si++; renderScene(); playScene(); }
+  else { playing=false; playBtn.textContent='▶ Replay'; markDone(ci); showQuizButton(); }
+}
+function play(){
+  if(playing){ stopSpeak(); playing=false; playBtn.textContent='▶ Play'; return; }
+  playing=true; playBtn.textContent='⏸ Pause';
+  if(playBtn.textContent.includes('Replay')||si>=CH[ci].scenes.length-1){ si=0; renderScene(); }
+  playScene();
+}
+function showQuizButton(){ quizChNum.textContent=CH[ci].num; toQuiz.style.display='block'; }
+
+playBtn.onclick=play;
+document.getElementById('prevBtn').onclick=()=>{stopSpeak();playing=false;playBtn.textContent='▶ Play';if(si>0){si--;atCheckpoint=false;renderScene();}};
+document.getElementById('nextBtn').onclick=()=>{stopSpeak();playing=false;playBtn.textContent='▶ Play';if(si<CH[ci].scenes.length-1){si++;renderScene();}};
+document.getElementById('replayBtn').onclick=()=>{stopSpeak();si=0;playing=false;playBtn.textContent='▶ Play';renderScene();};
+ttsToggle.onchange=()=>{ if(!ttsToggle.checked) stopSpeak(); };
+rateSel.onchange=()=>{ if(playing){ stopSpeak(); playScene(); } };
+
+/* ---- post-video quiz ---- */
+toQuiz.onclick=()=>{ buildQuiz(); quizsec.classList.add('show'); quizsec.scrollIntoView({behavior:'smooth'}); };
+function buildQuiz(){
+  const c=CH[ci]; quizTitle.textContent=`Ch ${c.num} — ${c.title}: NCLEX Quiz`;
+  quizBody.innerHTML=''; let answered=0,correct=0; const tot=c.quiz.length;
+  c.quiz.forEach((q,qi)=>{
+    const sata=Array.isArray(q.answer);
+    const card=document.createElement('div');card.className='qcard';
+    let opts=q.options.map((o,i)=>`<div class="qo" data-i="${i}"><span class="ll">${String.fromCharCode(65+i)}.</span><span>${o}</span></div>`).join('');
+    card.innerHTML=`<div class="qh">Q${qi+1} ${sata?'· Select all that apply':''}</div><div class="qq">${q.q}</div>${opts}<div class="qrat">${q.rat}</div>`;
+    const rat=card.querySelector('.qrat');
+    if(sata){
+      const chosen=new Set();
+      card.querySelectorAll('.qo').forEach(o=>{o.onclick=()=>{const i=+o.dataset.i;if(chosen.has(i)){chosen.delete(i);o.style.borderColor='';}else{chosen.add(i);o.style.borderColor='var(--teal)';}};});
+      const submit=document.createElement('button');submit.textContent='Check';submit.className='copt';submit.style.maxWidth='120px';submit.style.cursor='pointer';
+      submit.onclick=()=>{const ans=new Set(q.answer);let ok=chosen.size===ans.size&&[...chosen].every(x=>ans.has(x));
+        card.querySelectorAll('.qo').forEach(o=>{const i=+o.dataset.i;o.classList.add('locked');if(ans.has(i))o.classList.add('right');else if(chosen.has(i))o.classList.add('wrong');});
+        rat.classList.add('show');submit.style.display='none';answered++;if(ok)correct++;quizScore.textContent=`Score: ${correct} / ${answered} answered (${tot} total)`;};
+      card.appendChild(submit);
+    } else {
+      card.querySelectorAll('.qo').forEach(o=>{o.onclick=()=>{
+        const i=+o.dataset.i;card.querySelectorAll('.qo').forEach(x=>x.classList.add('locked'));
+        if(i===q.answer){o.classList.add('right');correct++;}else{o.classList.add('wrong');card.querySelectorAll('.qo')[q.answer].classList.add('right');}
+        rat.classList.add('show');answered++;quizScore.textContent=`Score: ${correct} / ${answered} answered (${tot} total)`;
+      };});
+    }
+    quizBody.appendChild(card);
+  });
+  quizScore.textContent=`Score: 0 / 0 answered (${tot} total)`;
+}
+
+window.addEventListener('beforeunload',()=>{if('speechSynthesis'in window)speechSynthesis.cancel();});
+buildMenu(); selectChapter(0);
+</script>
+</body>
+</html>
